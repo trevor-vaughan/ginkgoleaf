@@ -8,6 +8,8 @@ silent: true
 includes:
   go:
     taskfile: .taskfiles/go.yml
+  docs:
+    taskfile: .taskfiles/docs.yml
 
 tasks:
   default:

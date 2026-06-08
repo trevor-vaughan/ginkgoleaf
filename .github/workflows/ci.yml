@@ -15,10 +15,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Floor is 1.25 (resolves to latest 1.25.x patch). ginkgo v2.29+
-        # requires >= 1.25.0; go-task transitive deps (mvdan.cc/sh v3)
-        # pull the floor up to 1.25.10, which the latest patch satisfies.
-        go: ["1.25", "1.26"]
+        # Pinned to exactly 1.26.4 — the version the go.mod / go.work
+        # `go` directive requires. setup-go installs that exact patch
+        # release rather than the latest 1.26.x, so CI matches local builds.
+        go: ["1.26.4"]
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
@@ -91,7 +91,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5.6.0
         with:
-          go-version: "1.26"
+          go-version: "1.26.4"
       - name: Run fixture suites through ginkgoleaf
         run: go tool task go:test:fixtures FORMAT=tree COLOR=always
 
@@ -104,6 +104,6 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5.6.0
         with:
-          go-version: "1.26"
+          go-version: "1.26.4"
       - name: govulncheck
         run: go tool task go:vuln

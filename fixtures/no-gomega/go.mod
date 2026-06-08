@@ -1,6 +1,6 @@
 module fixtures/no-gomega
 
-go 1.25.0
+go 1.26.4
 
 replace github.com/trevor-vaughan/ginkgoleaf => ../..
 

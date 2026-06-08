@@ -1,0 +1,19 @@
+version: "3"
+
+# silent: true matches the rest of this repo's Taskfiles — suppress the
+# per-command shell echo; the `task: [name]` header still prints.
+silent: true
+
+tasks:
+  default:
+    silent: true
+    cmd: task --list 2>/dev/null
+
+  formats:
+    desc: Regenerate the per-format example blocks in README.md from the renderer `mixed` goldens.
+    cmds:
+      # Deterministic: reads render/testdata/<fmt>/mixed.golden (verified by
+      # `go test ./render/...`) and splices the rendered blocks between the
+      # README markers. Run after a renderer change, downstream of
+      # `go:golden:update` if the goldens themselves moved.
+      - bash "{{.ROOT_DIR}}/tools/gen-format-docs.sh"
