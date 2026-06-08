@@ -1,0 +1,26 @@
+# My Suite
+
+**FAIL** — 1 spec · 1 failed · 50ms
+
+<details open><summary><strong>Outer</strong></summary>
+
+- **Inner**
+  - ❌ yaml fails _(12ms)_
+
+</details>
+
+## Failures
+
+### ❌ Outer › Inner › yaml fails
+
+`at /example/inner_test.go:39`
+
+```text
+diff (-expected +actual):
+  map[string]any{
+  	"a": int(1),
+- 	"b": int(3),
++ 	"b": int(2),
+  }
+```
+

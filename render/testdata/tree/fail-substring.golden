@@ -1,0 +1,11 @@
+/example/my_suite_test.go (1 spec, 50ms)
+  1 failed
+└── Outer
+    └── Inner
+        └── ✗ substring fails
+
+Failures:
+  ✗ Outer > Inner > substring fails
+    at /example/inner_test.go:31
+    needle:   "goodbye"
+    haystack: "hello world"

@@ -1,0 +1,15 @@
+TAP version 14
+1..1
+not ok 1 - Outer > Inner > panics
+  ---
+  message: |-
+    Test Panicked: runtime error: index out of range [3] with length 2
+  severity: panic
+  at:
+    file: /example/inner_test.go
+    line: 44
+  stacktrace: |-
+    goroutine 1 [running]:
+      example/inner_test.go:44 +0x42
+  ...
+# total 1, pass 0, fail 0, skip 0, pending 0, panic 1

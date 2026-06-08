@@ -1,0 +1,41 @@
+version: "3"
+
+# silent: true suppresses the per-command echo of every shell line.
+# The `task: [name]` header still prints for each step so it's clear
+# which target is running; we just don't print the raw shell each time.
+silent: true
+
+includes:
+  go:
+    taskfile: .taskfiles/go.yml
+
+tasks:
+  default:
+    silent: true
+    cmd: task --list 2>/dev/null
+
+  build:
+    desc: Alias for go:build.
+    cmds:
+      - task: go:build
+
+  test:
+    desc: Alias for go:test. MODE picks the render format (default tree); MODE=llm filters ginkgo output to errors-only.
+    cmds:
+      - task: go:test
+
+  lint:
+    desc: Alias for go:lint.
+    cmds:
+      - task: go:lint
+
+  check:
+    desc: Run all quality gates — tidy, vet, lint, vuln, race tests, gosum, build (the gate CI runs).
+    cmds:
+      - task: go:tidy
+      - task: go:vet
+      - task: go:lint
+      - task: go:vuln
+      - task: go:test:race
+      - task: go:gosum
+      - task: go:build

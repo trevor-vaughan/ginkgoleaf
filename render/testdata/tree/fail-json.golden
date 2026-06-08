@@ -1,0 +1,15 @@
+/example/my_suite_test.go (1 spec, 50ms)
+  1 failed
+└── Outer
+    └── Inner
+        └── ✗ json fails
+
+Failures:
+  ✗ Outer > Inner > json fails
+    at /example/inner_test.go:35
+    diff (-expected +actual):
+      map[string]any{
+      	"a": float64(1),
+    - 	"b": float64(3),
+    + 	"b": float64(2),
+      }

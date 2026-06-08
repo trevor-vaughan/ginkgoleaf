@@ -1,0 +1,12 @@
+    [X] equals fails (8ms)
+        at /example/inner_test.go:25
+        expected: 2
+        actual:   1
+
+FAIL: My Suite | total 1 | pass 0 | fail 1 | skip 0 | pending 0 | panic 0 | duration 50ms | seed 1717000000
+
+Failures:
+  [X] Outer > Inner > equals fails
+      at /example/inner_test.go:25
+      expected: 2
+      actual:   1

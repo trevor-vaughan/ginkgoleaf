@@ -1,0 +1,7 @@
+#fields: state duration_ms location description
+passed	1	/example/interleaved_test.go:21	Alpha > reads > returns the stored value
+passed	1	/example/interleaved_test.go:21	Beta > stands on its own
+passed	1	/example/interleaved_test.go:21	Alpha > writes > persists the value
+passed	1	/example/interleaved_test.go:21	Alpha > reads > falls back to the default
+passed	1	/example/interleaved_test.go:21	Beta > still stands on its own
+#summary verdict=pass total=5 pass=5 fail=0 skip=0 pending=0 panic=0 duration_ms=100 suite="Interleaved Suite"

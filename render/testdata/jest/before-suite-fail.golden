@@ -1,0 +1,10 @@
+Outer
+  Inner
+    - never runs (12ms)
+
+Tests: 1 total, 0 passed, 0 failed, 1 skipped, 0 pending, 0 panicked
+Time:  50ms
+Seed:  1717000000
+Suite-level failure: BeforeSuite failed
+
+FAIL My Suite

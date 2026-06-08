@@ -1,0 +1,5 @@
+/example/my_suite_test.go (1 spec, 50ms)
+  1 pending
+└── Outer
+    └── Inner
+        └── ◌ is pending

@@ -1,0 +1,14 @@
+/example/interleaved_test.go (5 specs, 100ms)
+  [32m5 passed[0m
+[0Ksection_start:1717000000:ginkgoleaf_1[collapsed=true][0KAlpha
+├── reads
+│   ├── [32m✓[0m returns the stored value (1ms)
+│   └── [32m✓[0m falls back to the default (1ms)
+└── writes
+    └── [32m✓[0m persists the value (1ms)
+[0Ksection_end:1717000000:ginkgoleaf_1[0K
+[0Ksection_start:1717000000:ginkgoleaf_2[collapsed=true][0KBeta
+├── [32m✓[0m stands on its own (1ms)
+└── [32m✓[0m still stands on its own (1ms)
+[0Ksection_end:1717000000:ginkgoleaf_2[0K
+[32mPASS[0m Interleaved Suite — [32m5 passed[0m (100ms)

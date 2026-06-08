@@ -1,0 +1,15 @@
+/example/my_suite_test.go (1 spec, 50ms)
+  1 failed
+└── Outer
+    └── Inner
+        └── ✗ yaml fails
+
+Failures:
+  ✗ Outer > Inner > yaml fails
+    at /example/inner_test.go:39
+    diff (-expected +actual):
+      map[string]any{
+      	"a": int(1),
+    - 	"b": int(3),
+    + 	"b": int(2),
+      }

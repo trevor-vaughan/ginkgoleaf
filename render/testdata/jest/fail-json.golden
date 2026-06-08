@@ -1,0 +1,23 @@
+Outer
+  Inner
+    ✗ json fails (12ms)
+      at /example/inner_test.go:35
+      diff (-expected +actual):
+        map[string]any{
+        	"a": float64(1),
+      - 	"b": float64(3),
+      + 	"b": float64(2),
+        }
+
+Tests: 1 total, 0 passed, 1 failed, 0 skipped, 0 pending, 0 panicked
+Time:  50ms
+Seed:  1717000000
+
+Failures:
+  ✗ Outer > Inner > json fails
+    at /example/inner_test.go:35
+    diff (-expected +actual):
+      map[string]any{
+    ...
+
+FAIL My Suite

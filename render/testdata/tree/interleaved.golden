@@ -1,0 +1,11 @@
+/example/interleaved_test.go (5 specs, 100ms)
+  5 passed
+├── Alpha
+│   ├── reads
+│   │   ├── ✓ returns the stored value
+│   │   └── ✓ falls back to the default
+│   └── writes
+│       └── ✓ persists the value
+└── Beta
+    ├── ✓ stands on its own
+    └── ✓ still stands on its own

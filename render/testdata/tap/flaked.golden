@@ -1,0 +1,5 @@
+TAP version 14
+1..1
+ok 1 - Outer > Inner > flakes then passes
+# total 1, pass 1, fail 0, skip 0, pending 0, panic 0
+# flaked 1

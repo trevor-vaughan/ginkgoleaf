@@ -1,0 +1,15 @@
+    [X] eventually fails (2.00s)
+        at /example/inner_test.go:49
+        expected: 5
+        actual:   4
+        (eventually: 2s after 200 attempts, polling every 10ms)
+        last error: expected 4 to equal 5
+
+FAIL: My Suite | total 1 | pass 0 | fail 1 | skip 0 | pending 0 | panic 0 | duration 50ms | seed 1717000000
+
+Failures:
+  [X] Outer > Inner > eventually fails
+      at /example/inner_test.go:49
+      expected: 5
+      actual:   4
+      ...

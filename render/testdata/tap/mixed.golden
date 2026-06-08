@@ -1,0 +1,16 @@
+TAP version 14
+1..4
+ok 1 - Outer > Inner > a passes
+not ok 2 - Outer > Inner > equals fails
+  ---
+  message: |-
+    expected: 2
+    actual:   1
+  severity: fail
+  at:
+    file: /example/inner_test.go
+    line: 25
+  ...
+ok 3 - Outer > Inner > is skipped # SKIP
+ok 4 - Outer > Inner > is pending # TODO pending
+# total 4, pass 1, fail 1, skip 1, pending 1, panic 0

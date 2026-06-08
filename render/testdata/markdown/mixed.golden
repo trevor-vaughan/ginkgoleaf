@@ -1,0 +1,25 @@
+# Mixed Suite
+
+**FAIL** — 4 specs · 1 passed · 1 failed · 1 skipped · 1 pending · 100ms
+
+<details open><summary><strong>Outer</strong></summary>
+
+- **Inner**
+  - ✅ a passes _(12ms)_
+  - ❌ equals fails _(8ms)_
+  - ⏭️ is skipped _(12ms)_
+  - 🕒 is pending _(12ms)_
+
+</details>
+
+## Failures
+
+### ❌ Outer › Inner › equals fails
+
+`at /example/inner_test.go:25`
+
+```text
+expected: 2
+actual:   1
+```
+

@@ -1,0 +1,14 @@
+/example/mixed_test.go (4 specs, 100ms)
+  1 passed | 1 failed | 1 skipped | 1 pending
+└── Outer
+    └── Inner
+        ├── ✓ a passes
+        ├── ✗ equals fails
+        ├── - is skipped
+        └── ◌ is pending
+
+Failures:
+  ✗ Outer > Inner > equals fails
+    at /example/inner_test.go:25
+    expected: 2
+    actual:   1

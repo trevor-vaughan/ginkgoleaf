@@ -1,0 +1,21 @@
+    [X] captures output (12ms)
+        at /example/inner_test.go:60
+        expected: 2
+        actual:   1
+        captured GinkgoWriter output:
+        log line 1
+        log line 2
+        captured stdout/stderr:
+        stderr noise
+        progress report:
+        spec goroutine:
+          main.It.func1
+            /example/inner_test.go:60
+
+FAIL: My Suite | total 1 | pass 0 | fail 1 | skip 0 | pending 0 | panic 0 | duration 50ms | seed 1717000000
+
+Failures:
+  [X] Outer > Inner > captures output
+      at /example/inner_test.go:60
+      expected: 2
+      actual:   1

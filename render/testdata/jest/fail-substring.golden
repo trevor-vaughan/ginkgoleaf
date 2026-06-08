@@ -1,0 +1,18 @@
+Outer
+  Inner
+    ✗ substring fails (12ms)
+      at /example/inner_test.go:31
+      needle:   "goodbye"
+      haystack: "hello world"
+
+Tests: 1 total, 0 passed, 1 failed, 0 skipped, 0 pending, 0 panicked
+Time:  50ms
+Seed:  1717000000
+
+Failures:
+  ✗ Outer > Inner > substring fails
+    at /example/inner_test.go:31
+    needle:   "goodbye"
+    haystack: "hello world"
+
+FAIL My Suite

@@ -1,0 +1,3 @@
+    [~] never runs (12ms)
+
+FAIL: My Suite | total 1 | pass 0 | fail 0 | skip 1 | pending 0 | panic 0 | duration 50ms | seed 1717000000 | special-failure: BeforeSuite failed

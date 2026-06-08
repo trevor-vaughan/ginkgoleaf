@@ -1,0 +1,8 @@
+TAP version 14
+1..5
+ok 1 - Alpha > reads > returns the stored value
+ok 2 - Beta > stands on its own
+ok 3 - Alpha > writes > persists the value
+ok 4 - Alpha > reads > falls back to the default
+ok 5 - Beta > still stands on its own
+# total 5, pass 5, fail 0, skip 0, pending 0, panic 0

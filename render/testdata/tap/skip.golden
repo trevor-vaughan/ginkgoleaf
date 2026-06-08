@@ -1,0 +1,4 @@
+TAP version 14
+1..1
+ok 1 - Outer > Inner > is skipped # SKIP
+# total 1, pass 0, fail 0, skip 1, pending 0, panic 0

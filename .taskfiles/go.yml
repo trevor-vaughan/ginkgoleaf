@@ -1,0 +1,166 @@
+version: "3"
+
+# silent: true suppresses the per-command echo of every shell line.
+# The `task: [name]` header still prints for each step so it's clear
+# which target is running; we just don't print the raw shell each time.
+silent: true
+
+vars:
+  PKGS: ./...
+  # `go` invoked with the project's intended readonly module mode. go.work
+  # is in play (workspace mode permits only readonly/vendor), so an
+  # inherited GOFLAGS=-mod=mod — which some CI/dev containers export — is
+  # rejected with "-mod may only be set to readonly or vendor when in
+  # workspace mode" and would also rewrite module files mid-build. The
+  # GOFLAGS assignment is shell-level (not Task's env:, which does NOT
+  # override an OS-provided GOFLAGS); a no-op where GOFLAGS is already
+  # unset or readonly. Every go invocation below goes through this.
+  #
+  # GOTOOLCHAIN=auto so go.mod's `toolchain` directive is honored — some
+  # containers export GOTOOLCHAIN=local, which pins the build to the
+  # preinstalled toolchain and silently ignores the directive (leaving the
+  # vuln gate on an unpatched stdlib). auto lets go fetch the pinned version.
+  GO: 'GOFLAGS=-mod=readonly GOTOOLCHAIN=auto go'
+
+tasks:
+  default:
+    silent: true
+    cmd: task --list 2>/dev/null
+
+  build:
+    desc: Build the CLI binary
+    cmds:
+      - mkdir -p bin
+      - "{{.GO}} build -o bin/ginkgoleaf ./cmd/ginkgoleaf"
+
+  test:
+    desc: Run all tests. MODE picks the render format (default tree); MODE=llm filters ginkgo output to errors-only.
+    vars:
+      MODE: '{{.MODE | default "tree"}}'
+    requires:
+      vars:
+        - name: MODE
+          enum: [tree, jest, markdown, github, gitlab, text, shell, tap, llm]
+    cmds:
+      - mkdir -p .test-output
+      # Mirror the post-processing layout used by downstream consumers:
+      # ginkgo prints the per-suite succinct line + summary at the top,
+      # writes a consolidated JSON report, and our CLI then renders one
+      # tree per suite from the JSON. The two phases never interleave.
+      # --skip-package=fixtures because fixtures/ is a sibling go module
+      # graph; ginkgo -r would otherwise try to compile it from inside
+      # the root module and fail. `task test:fixtures` exercises those
+      # separately.
+      # --json-report path MUST stay relative (not $PWD/...): under -r an
+      # absolute path is re-resolved per-suite (leading slash stripped),
+      # littering empty `<pkg>/workspace/.test-output` dirs in the tree.
+      - |
+        if [ "{{.MODE}}" = "llm" ]; then
+          {{.GO}} tool ginkgo --succinct --no-color --skip-package=fixtures -r --json-report=.test-output/ginkgo.json {{.PKGS}} 2>&1 | grep -E '^\[|FAIL|PASS' | tee .test-output/log.txt
+        else
+          {{.GO}} tool ginkgo --succinct --skip-package=fixtures -r --json-report=.test-output/ginkgo.json {{.PKGS}} 2>&1 | tee .test-output/log.txt
+        fi
+      # MODE=llm isn't a renderer format; fall back to tree for the
+      # post-process step so users still see a structured summary.
+      - |
+        if [ "{{.MODE}}" = "llm" ]; then
+          {{.GO}} run ./cmd/ginkgoleaf --format=tree --in=.test-output/ginkgo.json
+        else
+          {{.GO}} run ./cmd/ginkgoleaf --format={{.MODE}} --in=.test-output/ginkgo.json
+        fi
+      - task: test:fixtures
+
+  test:race:
+    desc: Run all tests with the race detector.
+    cmds:
+      - mkdir -p .test-output
+      # --skip-package=fixtures: ginkgo -r recurses into the sibling
+      # fixtures/ modules and would run their intentional-failure suites.
+      # Skip them here; test:fixtures runs them on purpose. (The `test`
+      # task skips them for the same reason.)
+      - "{{.GO}} tool ginkgo --race --succinct --skip-package=fixtures -r {{.PKGS}} 2>&1 | tee .test-output/race.txt"
+      - task: test:fixtures
+
+  test:fixtures:
+    desc: Eat our own dogfood — run the Ginkgo fixtures through ginkgoleaf.
+    vars:
+      FORMAT: '{{.FORMAT | default "tree"}}'
+      COLOR: '{{.COLOR | default "auto"}}'
+    requires:
+      vars:
+        - name: FORMAT
+          enum: [tree, jest, markdown, github, gitlab, text, shell, tap]
+        - name: COLOR
+          enum: [auto, always, never]
+    cmds:
+      - mkdir -p .test-output
+      # Ginkgo prints its own succinct one-line-per-suite summary while
+      # running (the "[seed] Suite Name - N/N specs •••• SUCCESS! Tms PASS"
+      # format); we let it through so users see the live progress at the
+      # top. Our tree-format report follows below from the JSON report.
+      # Report path MUST stay relative: under `ginkgo -r` an absolute
+      # path is re-resolved per-suite working directory (leading slash
+      # stripped), which scatters empty `<pkg>/workspace/.test-output`
+      # trees through the source tree. A relative path resolves once,
+      # against the invocation cwd.
+      - 'echo "▶ fixtures/with-gomega"'
+      - "{{.GO}} tool ginkgo --succinct --json-report=.test-output/with-gomega.json -r ./fixtures/with-gomega/ || true"
+      - "{{.GO}} run ./cmd/ginkgoleaf --format={{.FORMAT}} --color={{.COLOR}} --in=.test-output/with-gomega.json"
+      - "echo"
+      - 'echo "▶ fixtures/no-gomega"'
+      - "{{.GO}} tool ginkgo --succinct --json-report=.test-output/no-gomega.json -r ./fixtures/no-gomega/ || true"
+      - "{{.GO}} run ./cmd/ginkgoleaf --format={{.FORMAT}} --color={{.COLOR}} --in=.test-output/no-gomega.json"
+
+  test:cover:
+    desc: Run tests with coverage profile.
+    cmds:
+      - mkdir -p .test-output
+      - "{{.GO}} test -coverprofile=.test-output/cover.out {{.PKGS}}"
+      - "{{.GO}} tool cover -func=.test-output/cover.out | tee .test-output/cover.txt"
+
+  golden:update:
+    desc: Regenerate golden files (inspect diff before committing).
+    cmds:
+      - "{{.GO}} test -count=1 ./render/... -update"
+
+  lint:
+    desc: Run golangci-lint via `go tool` (no global install).
+    cmds:
+      - "{{.GO}} tool golangci-lint run ./..."
+
+  vet:
+    desc: Run go vet.
+    cmds:
+      - "{{.GO}} vet ./..."
+
+  vuln:
+    desc: Scan for known vulnerabilities via `go tool govulncheck`.
+    cmds:
+      # GOWORK=off pins the scan to the root module, bypassing workspace
+      # mode so fixtures/ are not pulled in. (-mod=readonly comes from the
+      # GO var, as everywhere else.)
+      - GOWORK=off {{.GO}} tool govulncheck ./...
+
+  tidy:
+    desc: Tidy go.mod / go.sum.
+    cmds:
+      - "{{.GO}} mod tidy"
+
+  deps:
+    desc: Upgrade dependencies to latest minor/patch, tidy modules, then vet.
+    cmds:
+      # `go get -u` and `go mod tidy` must WRITE go.mod/go.sum, so they
+      # cannot run under the readonly GO var. GOWORK=off drops out of
+      # workspace mode (which permits only -mod=readonly|vendor and would
+      # otherwise reject the -mod=mod these commands need) and pins the
+      # upgrade to the root module — the same escape the `vuln` task uses.
+      # GOFLAGS=-mod=mod is set explicitly so an inherited readonly GOFLAGS
+      # can't veto the write.
+      - GOWORK=off GOFLAGS=-mod=mod go get -u ./...
+      - GOWORK=off GOFLAGS=-mod=mod go mod tidy
+      - task: vet
+
+  gosum:
+    desc: Verify gomega does not leak into the no-gomega consumer go.mod.
+    cmds:
+      - ./tools/check-no-gomega.sh

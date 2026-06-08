@@ -1,0 +1,31 @@
+# My Suite
+
+**FAIL** — 1 spec · 1 failed · 50ms
+
+<details open><summary><strong>Outer</strong></summary>
+
+- **Inner**
+  - ❌ captures output _(12ms)_
+
+</details>
+
+## Failures
+
+### ❌ Outer › Inner › captures output
+
+`at /example/inner_test.go:60`
+
+```text
+expected: 2
+actual:   1
+captured GinkgoWriter output:
+log line 1
+log line 2
+captured stdout/stderr:
+stderr noise
+progress report:
+spec goroutine:
+  main.It.func1
+    /example/inner_test.go:60
+```
+

@@ -1,0 +1,13 @@
+    [X] panics (12ms)
+        at /example/inner_test.go:44
+        Test Panicked: runtime error: index out of range [3] with length 2
+        stack trace:
+        goroutine 1 [running]:
+          example/inner_test.go:44 +0x42
+
+FAIL: My Suite | total 1 | pass 0 | fail 0 | skip 0 | pending 0 | panic 1 | duration 50ms | seed 1717000000
+
+Failures:
+  [X] Outer > Inner > panics
+      at /example/inner_test.go:44
+      Test Panicked: runtime error: index out of range [3] with length 2

@@ -1,0 +1,21 @@
+# Interleaved Suite
+
+**PASS** — 5 specs · 5 passed · 100ms
+
+<details><summary><strong>Alpha</strong></summary>
+
+- **reads**
+  - ✅ returns the stored value _(1ms)_
+  - ✅ falls back to the default _(1ms)_
+- **writes**
+  - ✅ persists the value _(1ms)_
+
+</details>
+
+<details><summary><strong>Beta</strong></summary>
+
+- ✅ stands on its own _(1ms)_
+- ✅ still stands on its own _(1ms)_
+
+</details>
+

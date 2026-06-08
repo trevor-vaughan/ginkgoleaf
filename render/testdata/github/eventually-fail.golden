@@ -1,0 +1,18 @@
+/example/my_suite_test.go (1 spec, 50ms)
+  1 failed
+::group::Outer
+└── Inner
+    └── ✗ eventually fails (2.00s)
+::endgroup::
+::group::Failures
+  ✗ Outer > Inner > eventually fails
+    at /example/inner_test.go:49
+::stop-commands::ginkgoleaf-end-output
+    expected: 5
+    actual:   4
+    (eventually: 2s after 200 attempts, polling every 10ms)
+    last error: expected 4 to equal 5
+::ginkgoleaf-end-output::
+::endgroup::
+::error file=/example/inner_test.go,line=49,title=Outer > Inner > eventually fails::expected: 5%0Aactual:   4%0A(eventually: 2s after 200 attempts, polling every 10ms)%0Alast error: expected 4 to equal 5
+::notice title=ginkgoleaf::FAIL My Suite — total 1 / pass 0 / fail 1 / skip 0 / pending 0 / panic 0

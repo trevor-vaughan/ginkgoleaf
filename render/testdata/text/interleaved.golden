@@ -1,0 +1,7 @@
+    [+] returns the stored value (1ms)
+  [+] stands on its own (1ms)
+    [+] persists the value (1ms)
+    [+] falls back to the default (1ms)
+  [+] still stands on its own (1ms)
+
+PASS: Interleaved Suite | total 5 | pass 5 | fail 0 | skip 0 | pending 0 | panic 0 | duration 100ms | seed 1717000000

@@ -1,0 +1,19 @@
+/example/mixed_test.go (4 specs, 100ms)
+  1 passed | 1 failed | 1 skipped | 1 pending
+::group::Outer
+└── Inner
+    ├── ✓ a passes (12ms)
+    ├── ✗ equals fails (8ms)
+    ├── - is skipped (12ms)
+    └── ◌ is pending (12ms)
+::endgroup::
+::group::Failures
+  ✗ Outer > Inner > equals fails
+    at /example/inner_test.go:25
+::stop-commands::ginkgoleaf-end-output
+    expected: 2
+    actual:   1
+::ginkgoleaf-end-output::
+::endgroup::
+::error file=/example/inner_test.go,line=25,title=Outer > Inner > equals fails::expected: 2%0Aactual:   1
+::notice title=ginkgoleaf::FAIL Mixed Suite — total 4 / pass 1 / fail 1 / skip 1 / pending 1 / panic 0

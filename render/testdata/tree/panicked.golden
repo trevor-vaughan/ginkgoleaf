@@ -1,0 +1,13 @@
+/example/my_suite_test.go (1 spec, 50ms)
+  1 panicked
+└── Outer
+    └── Inner
+        └── ✗ panics
+
+Failures:
+  ✗ Outer > Inner > panics
+    at /example/inner_test.go:44
+    Test Panicked: runtime error: index out of range [3] with length 2
+    stack trace:
+    goroutine 1 [running]:
+      example/inner_test.go:44 +0x42

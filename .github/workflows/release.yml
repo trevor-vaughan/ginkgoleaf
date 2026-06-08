@@ -1,0 +1,52 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write # create the release + upload assets
+  id-token: write # keyless cosign signing + provenance OIDC token
+  attestations: write # actions/attest-build-provenance
+
+jobs:
+  goreleaser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5.6.0
+        with:
+          go-version: "1.26"
+          # Disable the build cache for releases: a poisoned cache could taint
+          # published, signed artifacts (zizmor cache-poisoning).
+          cache: false
+      - name: Quality gate
+        run: go tool task check
+      # GoReleaser shells out to syft (SBOM) and cosign (sign); both must be on PATH.
+      - uses: anchore/sbom-action/download-syft@e22c389904149dbc22b58101806040fa8d37a610 # v0.24.0
+      - uses: sigstore/cosign-installer@398d4b0eeef1380460a10c8013a76f728fb906ac # v3.9.1
+      - uses: goreleaser/goreleaser-action@e435ccd777264be153ace6237001ef4d979d3a7a # v6.4.0
+        with:
+          distribution: goreleaser
+          # Pin to the v2 major line for reproducible releases (avoid `latest`).
+          version: "~> v2"
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # The repo ships a go.work; GoReleaser's builds fail in workspace
+          # mode (-mod may only be readonly/vendor). Disable workspace mode
+          # for the release build so module-mode resolution applies.
+          GOWORK: "off"
+      # GitHub-native SLSA build provenance for the published artifacts.
+      # Verify later with: gh attestation verify <file> --repo trevor-vaughan/ginkgoleaf
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2.4.0
+        with:
+          subject-path: |
+            dist/*.tar.gz
+            dist/*.zip
+            dist/*.sbom.json
+            dist/checksums.txt

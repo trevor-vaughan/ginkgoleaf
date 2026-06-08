@@ -1,0 +1,17 @@
+/example/my_suite_test.go (1 spec, 50ms)
+  [31m1 failed[0m
+[0Ksection_start:1717000000:ginkgoleaf_1[0KOuter
+└── Inner
+    └── [31m✗[0m json fails (12ms)
+[0Ksection_end:1717000000:ginkgoleaf_1[0K
+[0Ksection_start:1717000000:ginkgoleaf_2[0KFailures
+  [31m✗[0m Outer > Inner > json fails
+    [2mat /example/inner_test.go:35[0m
+    diff (-expected +actual):
+      map[string]any{
+      	"a": float64(1),
+    - 	"b": float64(3),
+    + 	"b": float64(2),
+      }
+[0Ksection_end:1717000000:ginkgoleaf_2[0K
+[31mFAIL[0m My Suite — [31m1 failed[0m (50ms)

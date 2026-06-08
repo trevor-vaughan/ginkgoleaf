@@ -1,0 +1,11 @@
+/example/my_suite_test.go (1 spec, 50ms)
+  1 failed
+└── Outer
+    └── Inner
+        └── ✗ equals fails
+
+Failures:
+  ✗ Outer > Inner > equals fails
+    at /example/inner_test.go:25
+    expected: 2
+    actual:   1

@@ -1,0 +1,21 @@
+Outer
+  Inner
+    ✓ a passes (12ms)
+    ✗ equals fails (8ms)
+      at /example/inner_test.go:25
+      expected: 2
+      actual:   1
+    - is skipped (12ms)
+    ◌ is pending (12ms)
+
+Tests: 4 total, 1 passed, 1 failed, 1 skipped, 1 pending, 0 panicked
+Time:  100ms
+Seed:  1717000000
+
+Failures:
+  ✗ Outer > Inner > equals fails
+    at /example/inner_test.go:25
+    expected: 2
+    actual:   1
+
+FAIL Mixed Suite

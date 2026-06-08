@@ -1,0 +1,21 @@
+Outer
+  Inner
+    ✗ eventually fails (2.00s)
+      at /example/inner_test.go:49
+      expected: 5
+      actual:   4
+      (eventually: 2s after 200 attempts, polling every 10ms)
+      last error: expected 4 to equal 5
+
+Tests: 1 total, 0 passed, 1 failed, 0 skipped, 0 pending, 0 panicked
+Time:  50ms
+Seed:  1717000000
+
+Failures:
+  ✗ Outer > Inner > eventually fails
+    at /example/inner_test.go:49
+    expected: 5
+    actual:   4
+    ...
+
+FAIL My Suite

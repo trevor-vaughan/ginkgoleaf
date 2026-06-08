@@ -1,0 +1,15 @@
+/example/my_suite_test.go (1 spec, 50ms)
+  [31m1 failed[0m
+[0Ksection_start:1717000000:ginkgoleaf_1[0KOuter
+└── Inner
+    └── [31m✗[0m eventually fails (2.00s)
+[0Ksection_end:1717000000:ginkgoleaf_1[0K
+[0Ksection_start:1717000000:ginkgoleaf_2[0KFailures
+  [31m✗[0m Outer > Inner > eventually fails
+    [2mat /example/inner_test.go:49[0m
+    expected: 5
+    actual:   4
+    (eventually: 2s after 200 attempts, polling every 10ms)
+    last error: expected 4 to equal 5
+[0Ksection_end:1717000000:ginkgoleaf_2[0K
+[31mFAIL[0m My Suite — [31m1 failed[0m (50ms)

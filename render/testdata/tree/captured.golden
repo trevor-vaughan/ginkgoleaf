@@ -1,0 +1,20 @@
+/example/my_suite_test.go (1 spec, 50ms)
+  1 failed
+└── Outer
+    └── Inner
+        └── ✗ captures output
+
+Failures:
+  ✗ Outer > Inner > captures output
+    at /example/inner_test.go:60
+    expected: 2
+    actual:   1
+    captured GinkgoWriter output:
+    log line 1
+    log line 2
+    captured stdout/stderr:
+    stderr noise
+    progress report:
+    spec goroutine:
+      main.It.func1
+        /example/inner_test.go:60

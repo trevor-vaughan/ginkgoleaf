@@ -1,0 +1,18 @@
+Outer
+  Inner
+    ✗ captures output (12ms)
+      at /example/inner_test.go:60
+      expected: 2
+      actual:   1
+
+Tests: 1 total, 0 passed, 1 failed, 0 skipped, 0 pending, 0 panicked
+Time:  50ms
+Seed:  1717000000
+
+Failures:
+  ✗ Outer > Inner > captures output
+    at /example/inner_test.go:60
+    expected: 2
+    actual:   1
+
+FAIL My Suite

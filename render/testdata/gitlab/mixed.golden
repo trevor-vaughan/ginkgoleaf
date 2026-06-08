@@ -1,0 +1,16 @@
+/example/mixed_test.go (4 specs, 100ms)
+  [32m1 passed[0m | [31m1 failed[0m | [33m1 skipped[0m | [33m1 pending[0m
+[0Ksection_start:1717000000:ginkgoleaf_1[0KOuter
+└── Inner
+    ├── [32m✓[0m a passes (12ms)
+    ├── [31m✗[0m equals fails (8ms)
+    ├── [33m-[0m is skipped (12ms)
+    └── [33m◌[0m is pending (12ms)
+[0Ksection_end:1717000000:ginkgoleaf_1[0K
+[0Ksection_start:1717000000:ginkgoleaf_2[0KFailures
+  [31m✗[0m Outer > Inner > equals fails
+    [2mat /example/inner_test.go:25[0m
+    expected: 2
+    actual:   1
+[0Ksection_end:1717000000:ginkgoleaf_2[0K
+[31mFAIL[0m Mixed Suite — [32m1 passed[0m | [31m1 failed[0m | [33m1 skipped[0m | [33m1 pending[0m (100ms)

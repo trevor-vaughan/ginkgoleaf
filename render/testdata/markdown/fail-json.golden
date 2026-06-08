@@ -1,0 +1,26 @@
+# My Suite
+
+**FAIL** — 1 spec · 1 failed · 50ms
+
+<details open><summary><strong>Outer</strong></summary>
+
+- **Inner**
+  - ❌ json fails _(12ms)_
+
+</details>
+
+## Failures
+
+### ❌ Outer › Inner › json fails
+
+`at /example/inner_test.go:35`
+
+```text
+diff (-expected +actual):
+  map[string]any{
+  	"a": float64(1),
+- 	"b": float64(3),
++ 	"b": float64(2),
+  }
+```
+

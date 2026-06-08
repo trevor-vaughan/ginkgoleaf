@@ -1,0 +1,24 @@
+# My Suite
+
+**FAIL** — 1 spec · 1 failed · 50ms
+
+<details open><summary><strong>Outer</strong></summary>
+
+- **Inner**
+  - ❌ eventually fails _(2.00s)_
+
+</details>
+
+## Failures
+
+### ❌ Outer › Inner › eventually fails
+
+`at /example/inner_test.go:49`
+
+```text
+expected: 5
+actual:   4
+(eventually: 2s after 200 attempts, polling every 10ms)
+last error: expected 4 to equal 5
+```
+

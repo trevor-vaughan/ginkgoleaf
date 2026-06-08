@@ -1,0 +1,6 @@
+#fields: state duration_ms location description
+passed	12	/example/inner_test.go:21	Outer > Inner > a passes
+failed	8	/example/inner_test.go:21	Outer > Inner > equals fails
+skipped	12	/example/inner_test.go:21	Outer > Inner > is skipped
+pending	12	/example/inner_test.go:21	Outer > Inner > is pending
+#summary verdict=fail total=4 pass=1 fail=1 skip=1 pending=1 panic=0 duration_ms=100 suite="Mixed Suite"

@@ -1,0 +1,10 @@
+/example/my_suite_test.go (1 spec, 50ms)
+  1 failed
+└── Outer
+    └── Inner
+        └── ! interrupted
+
+Failures:
+  ! Outer > Inner > interrupted
+    at /example/inner_test.go:55
+    Interrupted by user

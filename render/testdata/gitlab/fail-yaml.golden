@@ -1,0 +1,17 @@
+/example/my_suite_test.go (1 spec, 50ms)
+  [31m1 failed[0m
+[0Ksection_start:1717000000:ginkgoleaf_1[0KOuter
+└── Inner
+    └── [31m✗[0m yaml fails (12ms)
+[0Ksection_end:1717000000:ginkgoleaf_1[0K
+[0Ksection_start:1717000000:ginkgoleaf_2[0KFailures
+  [31m✗[0m Outer > Inner > yaml fails
+    [2mat /example/inner_test.go:39[0m
+    diff (-expected +actual):
+      map[string]any{
+      	"a": int(1),
+    - 	"b": int(3),
+    + 	"b": int(2),
+      }
+[0Ksection_end:1717000000:ginkgoleaf_2[0K
+[31mFAIL[0m My Suite — [31m1 failed[0m (50ms)

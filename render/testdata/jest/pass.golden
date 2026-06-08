@@ -1,0 +1,9 @@
+Outer
+  Inner
+    ✓ does the thing (12ms)
+
+Tests: 1 total, 1 passed, 0 failed, 0 skipped, 0 pending, 0 panicked
+Time:  50ms
+Seed:  1717000000
+
+PASS My Suite

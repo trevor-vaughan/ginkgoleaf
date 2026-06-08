@@ -1,0 +1,23 @@
+Outer
+  Inner
+    ✗ yaml fails (12ms)
+      at /example/inner_test.go:39
+      diff (-expected +actual):
+        map[string]any{
+        	"a": int(1),
+      - 	"b": int(3),
+      + 	"b": int(2),
+        }
+
+Tests: 1 total, 0 passed, 1 failed, 0 skipped, 0 pending, 0 panicked
+Time:  50ms
+Seed:  1717000000
+
+Failures:
+  ✗ Outer > Inner > yaml fails
+    at /example/inner_test.go:39
+    diff (-expected +actual):
+      map[string]any{
+    ...
+
+FAIL My Suite

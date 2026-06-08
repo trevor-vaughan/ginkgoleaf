@@ -1,0 +1,7 @@
+/example/my_suite_test.go (1 spec, 50ms)
+  [32m1 passed[0m | [33m1 flaked[0m
+[0Ksection_start:1717000000:ginkgoleaf_1[collapsed=true][0KOuter
+└── Inner
+    └── [32m✓[0m flakes then passes (12ms)
+[0Ksection_end:1717000000:ginkgoleaf_1[0K
+[32mPASS[0m My Suite — [32m1 passed[0m | [33m1 flaked[0m (50ms)

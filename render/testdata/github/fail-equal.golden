@@ -1,0 +1,16 @@
+/example/my_suite_test.go (1 spec, 50ms)
+  1 failed
+::group::Outer
+└── Inner
+    └── ✗ equals fails (8ms)
+::endgroup::
+::group::Failures
+  ✗ Outer > Inner > equals fails
+    at /example/inner_test.go:25
+::stop-commands::ginkgoleaf-end-output
+    expected: 2
+    actual:   1
+::ginkgoleaf-end-output::
+::endgroup::
+::error file=/example/inner_test.go,line=25,title=Outer > Inner > equals fails::expected: 2%0Aactual:   1
+::notice title=ginkgoleaf::FAIL My Suite — total 1 / pass 0 / fail 1 / skip 0 / pending 0 / panic 0

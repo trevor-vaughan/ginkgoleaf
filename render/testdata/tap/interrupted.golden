@@ -1,0 +1,12 @@
+TAP version 14
+1..1
+not ok 1 - Outer > Inner > interrupted
+  ---
+  message: |-
+    Interrupted by user
+  severity: interrupt
+  at:
+    file: /example/inner_test.go
+    line: 55
+  ...
+# total 1, pass 0, fail 1, skip 0, pending 0, panic 0

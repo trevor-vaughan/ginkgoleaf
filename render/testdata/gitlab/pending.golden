@@ -1,0 +1,7 @@
+/example/my_suite_test.go (1 spec, 50ms)
+  [33m1 pending[0m
+[0Ksection_start:1717000000:ginkgoleaf_1[collapsed=true][0KOuter
+└── Inner
+    └── [33m◌[0m is pending (12ms)
+[0Ksection_end:1717000000:ginkgoleaf_1[0K
+[32mPASS[0m My Suite — [33m1 pending[0m (50ms)

@@ -1,0 +1,15 @@
+/example/my_suite_test.go (1 spec, 50ms)
+  1 failed
+::group::Outer
+└── Inner
+    └── ! interrupted (12ms)
+::endgroup::
+::group::Failures
+  ! Outer > Inner > interrupted
+    at /example/inner_test.go:55
+::stop-commands::ginkgoleaf-end-output
+    Interrupted by user
+::ginkgoleaf-end-output::
+::endgroup::
+::error file=/example/inner_test.go,line=55,title=Outer > Inner > interrupted::Interrupted by user
+::notice title=ginkgoleaf::FAIL My Suite — total 1 / pass 0 / fail 1 / skip 0 / pending 0 / panic 0

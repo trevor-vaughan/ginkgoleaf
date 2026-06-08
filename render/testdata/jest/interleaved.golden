@@ -1,0 +1,18 @@
+Alpha
+  reads
+    ✓ returns the stored value (1ms)
+Beta
+  ✓ stands on its own (1ms)
+Alpha
+  writes
+    ✓ persists the value (1ms)
+  reads
+    ✓ falls back to the default (1ms)
+Beta
+  ✓ still stands on its own (1ms)
+
+Tests: 5 total, 5 passed, 0 failed, 0 skipped, 0 pending, 0 panicked
+Time:  100ms
+Seed:  1717000000
+
+PASS Interleaved Suite

@@ -1,0 +1,7 @@
+/example/my_suite_test.go (1 spec, 50ms)
+  1 skipped
+└── Outer
+    └── Inner
+        └── - never runs
+
+Suite-level failure: BeforeSuite failed

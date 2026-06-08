@@ -1,0 +1,18 @@
+/example/my_suite_test.go (1 spec, 50ms)
+  1 panicked
+::group::Outer
+└── Inner
+    └── ✗ panics (12ms)
+::endgroup::
+::group::Failures
+  ✗ Outer > Inner > panics
+    at /example/inner_test.go:44
+::stop-commands::ginkgoleaf-end-output
+    Test Panicked: runtime error: index out of range [3] with length 2
+    stack trace:
+    goroutine 1 [running]:
+      example/inner_test.go:44 +0x42
+::ginkgoleaf-end-output::
+::endgroup::
+::error file=/example/inner_test.go,line=44,title=Outer > Inner > panics::Test Panicked: runtime error: index out of range [3] with length 2
+::notice title=ginkgoleaf::FAIL My Suite — total 1 / pass 0 / fail 0 / skip 0 / pending 0 / panic 1

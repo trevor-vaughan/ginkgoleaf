@@ -1,0 +1,11 @@
+# My Suite
+
+**PASS** — 1 spec · 1 passed · 50ms
+
+<details><summary><strong>Outer</strong></summary>
+
+- **Inner**
+  - ✅ does the thing _(12ms)_
+
+</details>
+

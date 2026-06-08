@@ -1,0 +1,20 @@
+/example/my_suite_test.go (1 spec, 50ms)
+  1 failed
+::group::Outer
+└── Inner
+    └── ✗ json fails (12ms)
+::endgroup::
+::group::Failures
+  ✗ Outer > Inner > json fails
+    at /example/inner_test.go:35
+::stop-commands::ginkgoleaf-end-output
+    diff (-expected +actual):
+      map[string]any{
+      	"a": float64(1),
+    - 	"b": float64(3),
+    + 	"b": float64(2),
+      }
+::ginkgoleaf-end-output::
+::endgroup::
+::error file=/example/inner_test.go,line=35,title=Outer > Inner > json fails::diff (-expected +actual):%0A  map[string]any{%0A  	"a": float64(1),%0A- 	"b": float64(3),%0A+ 	"b": float64(2),%0A  }%0A
+::notice title=ginkgoleaf::FAIL My Suite — total 1 / pass 0 / fail 1 / skip 0 / pending 0 / panic 0

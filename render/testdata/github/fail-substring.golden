@@ -1,0 +1,16 @@
+/example/my_suite_test.go (1 spec, 50ms)
+  1 failed
+::group::Outer
+└── Inner
+    └── ✗ substring fails (12ms)
+::endgroup::
+::group::Failures
+  ✗ Outer > Inner > substring fails
+    at /example/inner_test.go:31
+::stop-commands::ginkgoleaf-end-output
+    needle:   "goodbye"
+    haystack: "hello world"
+::ginkgoleaf-end-output::
+::endgroup::
+::error file=/example/inner_test.go,line=31,title=Outer > Inner > substring fails::needle:   "goodbye"%0Ahaystack: "hello world"
+::notice title=ginkgoleaf::FAIL My Suite — total 1 / pass 0 / fail 1 / skip 0 / pending 0 / panic 0

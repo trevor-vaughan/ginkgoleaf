@@ -1,0 +1,24 @@
+# My Suite
+
+**FAIL** — 1 spec · 1 panicked · 50ms
+
+<details open><summary><strong>Outer</strong></summary>
+
+- **Inner**
+  - ❌ panics _(12ms)_
+
+</details>
+
+## Failures
+
+### ❌ Outer › Inner › panics
+
+`at /example/inner_test.go:44`
+
+```text
+Test Panicked: runtime error: index out of range [3] with length 2
+stack trace:
+goroutine 1 [running]:
+  example/inner_test.go:44 +0x42
+```
+

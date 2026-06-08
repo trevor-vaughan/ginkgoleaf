@@ -1,0 +1,20 @@
+/example/my_suite_test.go (1 spec, 50ms)
+  1 failed
+::group::Outer
+└── Inner
+    └── ✗ yaml fails (12ms)
+::endgroup::
+::group::Failures
+  ✗ Outer > Inner > yaml fails
+    at /example/inner_test.go:39
+::stop-commands::ginkgoleaf-end-output
+    diff (-expected +actual):
+      map[string]any{
+      	"a": int(1),
+    - 	"b": int(3),
+    + 	"b": int(2),
+      }
+::ginkgoleaf-end-output::
+::endgroup::
+::error file=/example/inner_test.go,line=39,title=Outer > Inner > yaml fails::diff (-expected +actual):%0A  map[string]any{%0A  	"a": int(1),%0A- 	"b": int(3),%0A+ 	"b": int(2),%0A  }%0A
+::notice title=ginkgoleaf::FAIL My Suite — total 1 / pass 0 / fail 1 / skip 0 / pending 0 / panic 0

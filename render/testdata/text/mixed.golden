@@ -1,0 +1,15 @@
+    [+] a passes (12ms)
+    [X] equals fails (8ms)
+        at /example/inner_test.go:25
+        expected: 2
+        actual:   1
+    [~] is skipped (12ms)
+    [.] is pending (12ms)
+
+FAIL: Mixed Suite | total 4 | pass 1 | fail 1 | skip 1 | pending 1 | panic 0 | duration 100ms | seed 1717000000
+
+Failures:
+  [X] Outer > Inner > equals fails
+      at /example/inner_test.go:25
+      expected: 2
+      actual:   1

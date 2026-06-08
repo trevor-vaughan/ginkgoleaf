@@ -1,0 +1,13 @@
+# My Suite
+
+**FAIL** — 1 spec · 1 skipped · 50ms
+
+> ⚠️ Suite-level failure: BeforeSuite failed
+
+<details><summary><strong>Outer</strong></summary>
+
+- **Inner**
+  - ⏭️ never runs _(12ms)_
+
+</details>
+

@@ -1,0 +1,14 @@
+/example/interleaved_test.go (5 specs, 100ms)
+  5 passed
+::group::Alpha
+├── reads
+│   ├── ✓ returns the stored value (1ms)
+│   └── ✓ falls back to the default (1ms)
+└── writes
+    └── ✓ persists the value (1ms)
+::endgroup::
+::group::Beta
+├── ✓ stands on its own (1ms)
+└── ✓ still stands on its own (1ms)
+::endgroup::
+::notice title=ginkgoleaf::PASS Interleaved Suite — total 5 / pass 5 / fail 0 / skip 0 / pending 0 / panic 0

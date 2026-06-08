@@ -1,0 +1,109 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: test (go ${{ matrix.go }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Floor is 1.25 (resolves to latest 1.25.x patch). ginkgo v2.29+
+        # requires >= 1.25.0; go-task transitive deps (mvdan.cc/sh v3)
+        # pull the floor up to 1.25.10, which the latest patch satisfies.
+        go: ["1.25", "1.26"]
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5.6.0
+        with:
+          go-version: ${{ matrix.go }}
+      # task, ginkgo, and golangci-lint are all declared in go.mod's
+      # `tool` block, so `go tool <name>` works out of the box once
+      # setup-go and `go mod download` have run — no global install.
+
+      - name: Lint, vet, gosum hygiene
+        run: |
+          go tool task go:vet
+          go tool task lint
+          go tool task go:gosum
+
+      # Run the test phase directly so we control where the JSON report
+      # lands and can render PR annotations + a step summary from it
+      # below. `task test` does the equivalent locally; in CI we want
+      # the JSON path to be stable.
+      - name: Run tests
+        run: |
+          mkdir -p .test-output
+          go tool ginkgo --race --succinct --skip-package=fixtures -r --keep-going \
+            --json-report=.test-output/ginkgo.json ./... || echo "tests failed; annotations follow"
+        # We swallow the non-zero so the annotation/summary steps still
+        # run; the final `Verify exit` step re-fails the job below.
+
+      - name: Render PR annotations
+        if: always()
+        run: |
+          if [ -s .test-output/ginkgo.json ]; then
+            go run ./cmd/ginkgoleaf --format=github --in=.test-output/ginkgo.json
+          fi
+
+      - name: Render PR summary
+        if: always()
+        run: |
+          if [ -s .test-output/ginkgo.json ]; then
+            go run ./cmd/ginkgoleaf --format=markdown \
+              --in=.test-output/ginkgo.json --out=.test-output/summary.md
+            cat .test-output/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Verify exit
+        if: always()
+        run: |
+          # Replay the test run with a non-suppressed exit so the job
+          # status reflects test outcome. This is fast: build cache and
+          # module cache are warm from the previous step.
+          go tool ginkgo --race --succinct --skip-package=fixtures -r ./...
+
+      - name: Build CLI
+        run: go tool task build
+
+      - name: Upload test logs on failure
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: test-output-go${{ matrix.go }}
+          path: .test-output/
+
+  fixtures:
+    name: integration fixtures
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5.6.0
+        with:
+          go-version: "1.26"
+      - name: Run fixture suites through ginkgoleaf
+        run: go tool task go:test:fixtures FORMAT=tree COLOR=always
+
+  vuln:
+    name: govulncheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5.6.0
+        with:
+          go-version: "1.26"
+      - name: govulncheck
+        run: go tool task go:vuln

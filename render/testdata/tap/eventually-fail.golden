@@ -1,0 +1,18 @@
+TAP version 14
+1..1
+not ok 1 - Outer > Inner > eventually fails
+  ---
+  message: |-
+    expected: 5
+    actual:   4
+    (eventually: 2s after 200 attempts, polling every 10ms)
+    last error: expected 4 to equal 5
+  severity: fail
+  at:
+    file: /example/inner_test.go
+    line: 49
+  eventually:
+    duration: 2s
+    attempts: 200
+  ...
+# total 1, pass 0, fail 1, skip 0, pending 0, panic 0

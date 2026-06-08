@@ -1,0 +1,30 @@
+# Test artifacts
+.test-output/
+coverage.out
+coverage.html
+
+# Build artifacts
+/bin/
+/dist/
+/ginkgoleaf
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Local env
+.env
+.env.local
+
+# Vendored agent tooling (installed by `lola`/host CLIs; not part of the
+# codebase) and generated lint reports. Excluded from git and, since
+# MegaLinter honors .gitignore, from linting. Do not edit files under these.
+.lola/
+.opencode/
+/megalinter-reports/
+
+# Vendored superpowers planning artifacts (written by the `superpowers`
+# skill suite; not part of the codebase). Never committed or linted.
+docs/superpowers/

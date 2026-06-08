@@ -1,0 +1,11 @@
+# My Suite
+
+**PASS** — 1 spec · 1 passed · 1 flaked · 50ms
+
+<details><summary><strong>Outer</strong></summary>
+
+- **Inner**
+  - ✅ flakes then passes _(12ms)_
+
+</details>
+

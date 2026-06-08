@@ -1,0 +1,25 @@
+module fixtures/no-gomega
+
+go 1.25.0
+
+replace github.com/trevor-vaughan/ginkgoleaf => ../..
+
+require (
+	github.com/onsi/ginkgo/v2 v2.29.0
+	github.com/trevor-vaughan/ginkgoleaf v0.0.0-00010101000000-000000000000
+)
+
+require (
+	github.com/Masterminds/semver/v3 v3.5.0 // indirect
+	github.com/go-logr/logr v1.4.3 // indirect
+	github.com/go-task/slim-sprig/v3 v3.0.0 // indirect
+	github.com/google/go-cmp v0.7.0 // indirect
+	github.com/google/pprof v0.0.0-20260402051712-545e8a4df936 // indirect
+	github.com/mattn/go-isatty v0.0.22 // indirect
+	github.com/xlab/treeprint v1.2.0 // indirect
+	golang.org/x/mod v0.35.0 // indirect
+	golang.org/x/sync v0.20.0 // indirect
+	golang.org/x/sys v0.43.0 // indirect
+	golang.org/x/tools v0.44.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
+)

@@ -1,0 +1,8 @@
+/example/my_suite_test.go (1 spec, 50ms)
+  1 skipped
+::group::Outer
+└── Inner
+    └── - never runs (12ms)
+::endgroup::
+::error title=ginkgoleaf::Suite-level failure: BeforeSuite failed
+::notice title=ginkgoleaf::FAIL My Suite — total 1 / pass 0 / fail 0 / skip 1 / pending 0 / panic 0

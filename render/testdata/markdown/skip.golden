@@ -1,0 +1,11 @@
+# My Suite
+
+**PASS** — 1 spec · 1 skipped · 50ms
+
+<details><summary><strong>Outer</strong></summary>
+
+- **Inner**
+  - ⏭️ is skipped _(12ms)_
+
+</details>
+
