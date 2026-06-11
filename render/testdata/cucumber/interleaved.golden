@@ -1,0 +1,28 @@
+Feature: Interleaved Suite
+
+  Scenario: returns the stored value
+    Given Alpha                   # /example/interleaved_test.go:10
+    And reads                     # /example/interleaved_test.go:11
+    Then returns the stored value # /example/interleaved_test.go:21
+
+  Scenario: stands on its own
+    Given Beta             # /example/interleaved_test.go:10
+    Then stands on its own # /example/interleaved_test.go:21
+
+  Scenario: persists the value
+    Given Alpha             # /example/interleaved_test.go:10
+    And writes              # /example/interleaved_test.go:11
+    Then persists the value # /example/interleaved_test.go:21
+
+  Scenario: falls back to the default
+    Given Alpha                    # /example/interleaved_test.go:10
+    And reads                      # /example/interleaved_test.go:11
+    Then falls back to the default # /example/interleaved_test.go:21
+
+  Scenario: still stands on its own
+    Given Beta                   # /example/interleaved_test.go:10
+    Then still stands on its own # /example/interleaved_test.go:21
+
+5 scenarios (5 passed)
+13 steps (13 passed)
+100ms

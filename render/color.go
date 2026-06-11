@@ -106,6 +106,9 @@ func (a *ANSI) WriteGreen(s string) { a.writeColored("32", s) }
 // WriteYellow writes s in yellow when color is enabled, plain otherwise.
 func (a *ANSI) WriteYellow(s string) { a.writeColored("33", s) }
 
+// WriteCyan writes s in cyan when color is enabled, plain otherwise.
+func (a *ANSI) WriteCyan(s string) { a.writeColored("36", s) }
+
 // WriteDim writes s dimmed when color is enabled, plain otherwise.
 func (a *ANSI) WriteDim(s string) { a.writeColored("2", s) }
 

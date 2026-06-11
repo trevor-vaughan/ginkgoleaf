@@ -264,8 +264,8 @@ func failureDetail(s SpecRow) string {
 // failureExtras returns optional labelled blocks for a failing spec —
 // captured GinkgoWriter output, captured stdout/stderr, and the progress
 // report — or "" when none are present. Rendered only by the verbose and
-// structured renderers (tree, text, markdown, tap); the compact CI
-// formats omit it to keep annotations and one-line records lean.
+// structured renderers (tree, text, markdown, tap, cucumber); the compact
+// CI formats omit it to keep annotations and one-line records lean.
 func failureExtras(s SpecRow) string {
 	var b strings.Builder
 	if s.CapturedOut != "" {

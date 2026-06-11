@@ -1,0 +1,15 @@
+Feature: My Suite
+
+  Scenario: panics
+    Given Outer # /example/outer_test.go:10
+    And Inner   # /example/inner_test.go:15
+    Then panics # /example/inner_test.go:21
+      at /example/inner_test.go:44
+      Test Panicked: runtime error: index out of range [3] with length 2
+      stack trace:
+      goroutine 1 [running]:
+        example/inner_test.go:44 +0x42
+
+1 scenario (1 failed)
+3 steps (2 passed, 1 failed)
+50ms

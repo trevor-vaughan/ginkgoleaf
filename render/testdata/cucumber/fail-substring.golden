@@ -1,0 +1,13 @@
+Feature: My Suite
+
+  Scenario: substring fails
+    Given Outer          # /example/outer_test.go:10
+    And Inner            # /example/inner_test.go:15
+    Then substring fails # /example/inner_test.go:21
+      at /example/inner_test.go:31
+      needle:   "goodbye"
+      haystack: "hello world"
+
+1 scenario (1 failed)
+3 steps (2 passed, 1 failed)
+50ms

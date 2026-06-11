@@ -41,9 +41,9 @@ var _ = Describe("Format", func() {
 	})
 
 	Describe("FormatList", func() {
-		It("leads with tree and lists all eight formats", func() {
+		It("leads with tree and lists all nine formats", func() {
 			Expect(render.FormatList()).To(Equal(
-				"tree|jest|markdown|github|gitlab|text|shell|tap"))
+				"tree|jest|markdown|github|gitlab|text|shell|tap|cucumber"))
 		})
 	})
 })

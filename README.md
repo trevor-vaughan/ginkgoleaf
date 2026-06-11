@@ -1,7 +1,7 @@
 # ginkgoleaf
 
 A third-party output formatter for [Ginkgo v2](https://github.com/onsi/ginkgo) that
-renders test results in eight human- and machine-friendly formats. Drop it into
+renders test results in nine human- and machine-friendly formats. Drop it into
 your suite as a library, or post-process Ginkgo's JSON report from the CLI.
 
 **Status:** Pre-release. APIs may still change.
@@ -23,13 +23,14 @@ your suite as a library, or post-process Ginkgo's JSON report from the CLI.
 | Format     | Mode      | Use it for                                                                                                                                                                       |
 |------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `tree`     | batch     | The default human format — box-drawing tree per suite with bold headings, colored glyphs, and a trailing Failures block.                                                         |
-| `jest`     | streaming | jest-style with check/X glyphs, BDD nesting headers, inline failures, OSC 8 file:line links.                                                                                     |
+| `jest`     | streaming | jest-style with check/X glyphs, BDD nesting headers, inline failures, file:line source refs.                                                                                    |
 | `markdown` | batch     | `<details>` blocks per top-level container; failing groups expanded by default.                                                                                                  |
 | `github`   | batch     | GitHub Actions workflow commands (`::group::`, `::error file=...,line=...`), preceded by a two-line human-readable header (suite path + counts) that Actions logs as plain text. |
 | `gitlab`   | batch     | GitLab CI `section_start`/`section_end` markers + ANSI verdicts.                                                                                                                 |
 | `text`     | streaming | Plain ASCII tree, never ANSI.                                                                                                                                                    |
 | `shell`    | streaming | Tab-separated `STATE\tDURATION_MS\tFILE:LINE\tDESC` records, preceded by a `#fields:` header and followed by a `#summary` totals line — grep/awk friendly.                       |
 | `tap`      | batch     | TAP 14 with YAML diagnostics blocks.                                                                                                                                             |
+| `cucumber` | batch     | Gherkin-shaped view: one Scenario per spec, a step per container + leaf, each with a `# file:line` source ref. `Given`/`And`/`Then` are structural (outer→inner→leaf), not behavioural BDD.                |
 
 Color resolution everywhere: `--color=auto` (default) colors a terminal **or a
 pipe** — so `ginkgoleaf … | less -R` stays colored — but writes plain output to
@@ -238,6 +239,42 @@ not ok 2 - Outer > Inner > equals fails
 ok 3 - Outer > Inner > is skipped # SKIP
 ok 4 - Outer > Inner > is pending # TODO pending
 # total 4, pass 1, fail 1, skip 1, pending 1, panic 0
+```
+
+</details>
+
+<details>
+<summary><code>cucumber</code> — Gherkin-shaped, file:line per step (keywords structural, not behavioural)</summary>
+
+```text
+Feature: Mixed Suite
+
+  Scenario: a passes
+    Given Outer   # /example/outer_test.go:10
+    And Inner     # /example/inner_test.go:15
+    Then a passes # /example/inner_test.go:21
+
+  Scenario: equals fails
+    Given Outer       # /example/outer_test.go:10
+    And Inner         # /example/inner_test.go:15
+    Then equals fails # /example/inner_test.go:21
+      at /example/inner_test.go:25
+      expected: 2
+      actual:   1
+
+  Scenario: is skipped
+    Given Outer     # /example/outer_test.go:10
+    And Inner       # /example/inner_test.go:15
+    Then is skipped # /example/inner_test.go:21
+
+  Scenario: is pending
+    Given Outer     # /example/outer_test.go:10
+    And Inner       # /example/inner_test.go:15
+    Then is pending # /example/inner_test.go:21
+
+4 scenarios (1 passed, 1 failed, 1 skipped, 1 pending)
+12 steps (5 passed, 1 failed, 3 skipped, 3 pending)
+100ms
 ```
 
 </details>

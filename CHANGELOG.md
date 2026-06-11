@@ -10,9 +10,13 @@ Conventional Commit messages; this file tracks human-curated highlights.
 ## [Unreleased]
 
 ### Added
-- Initial release of ginkgoleaf, a Ginkgo v2 output formatter with eight
+- Initial release of ginkgoleaf, a Ginkgo v2 output formatter with nine
   output formats: `tree`, `jest`, `markdown`, `github`, `gitlab`, `text`,
-  `shell`, and `tap`.
+  `shell`, `tap`, and `cucumber`.
+- The `cucumber` format renders a Gherkin-shaped view with a
+  `# file:line` source reference on every step (each Describe/Context
+  container and the leaf It), for navigating large suites; its
+  `Given`/`And`/`Then` keywords are structural, not behavioural BDD.
 - Structured formats (`tree`, `github`, `gitlab`, `markdown`) render the
   spec hierarchy by structure, not execution order: a container that
   re-enters non-contiguously under Ginkgo's `--randomize-all` is merged

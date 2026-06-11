@@ -56,7 +56,13 @@ type SpecRow struct {
 	ReportEntries []ReportEntry
 	NumAttempts   int
 	ContainerHier []string // FullText minus the leaf "It"
-	LeafText      string   // the "It" / leaf description
+	// ContainerLocations are the source locations of the Describe/Context
+	// containers, parallel to ContainerHier (Ginkgo's
+	// ContainerHierarchyLocations). May be shorter than ContainerHier for
+	// hand-built or truncated reports; consumers must bounds-check before
+	// indexing.
+	ContainerLocations []CodeLocation
+	LeafText           string // the "It" / leaf description
 }
 
 // FailureRow is the data we need to render a failure.

@@ -1,8 +1,8 @@
 // Package ginkgoleaf is a third-party output formatter for Ginkgo v2.
 //
-// It produces human- and LLM-friendly reports in eight formats: tree, jest,
-// markdown, github, gitlab, text, shell, and tap. There are two ways to use
-// it:
+// It produces human- and LLM-friendly reports in nine formats: tree, jest,
+// markdown, github, gitlab, text, shell, tap, and cucumber. There are two ways
+// to use it:
 //
 // In-suite (this package): call [Register] once at file scope in a *_test.go
 // file. It hooks Ginkgo's sanctioned ReportAfterSuite decorator and renders

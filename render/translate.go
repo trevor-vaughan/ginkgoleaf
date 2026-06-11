@@ -21,7 +21,7 @@ func TranslateWithParser(in types.Report, parseFn func(string) MatcherEvent) Rep
 		StartTime: in.StartTime,
 		EndTime:   in.EndTime,
 		Suite: SuiteRow{
-			Name:           in.SuiteDescription,
+			Name:           sanitizeLine(in.SuiteDescription),
 			Path:           in.SuitePath,
 			SuiteSucceeded: in.SuiteSucceeded,
 			PreRunStats: PreRunStats{
@@ -150,13 +150,14 @@ func SetEntryDecoder(fn func(string) (MatcherEvent, bool)) {
 
 func translateSpec(in types.SpecReport) SpecRow {
 	out := SpecRow{
-		FullText:      sanitizeLines(append(append([]string{}, in.ContainerHierarchyTexts...), in.LeafNodeText)),
-		ContainerHier: sanitizeLines(in.ContainerHierarchyTexts),
-		LeafText:      sanitizeLine(in.LeafNodeText),
-		State:         translateState(in.State),
-		Duration:      in.RunTime,
-		StartTime:     in.StartTime,
-		EndTime:       in.EndTime,
+		FullText:           sanitizeLines(append(append([]string{}, in.ContainerHierarchyTexts...), in.LeafNodeText)),
+		ContainerHier:      sanitizeLines(in.ContainerHierarchyTexts),
+		LeafText:           sanitizeLine(in.LeafNodeText),
+		State:              translateState(in.State),
+		Duration:           in.RunTime,
+		StartTime:          in.StartTime,
+		EndTime:            in.EndTime,
+		ContainerLocations: translateLocations(in.ContainerHierarchyLocations),
 		Location: CodeLocation{
 			FileName:   sanitizeLine(in.LeafNodeLocation.FileName),
 			LineNumber: in.LeafNodeLocation.LineNumber,
@@ -233,6 +234,24 @@ func translateState(s types.SpecState) State {
 	default:
 		return StateUnknown
 	}
+}
+
+// translateLocations converts Ginkgo's container CodeLocations into the
+// canonical model, sanitizing each FileName at this single untrusted-input
+// boundary exactly as the leaf location is. Returns nil for an empty input
+// so a spec with no containers carries no slice.
+func translateLocations(in []types.CodeLocation) []CodeLocation {
+	if len(in) == 0 {
+		return nil
+	}
+	out := make([]CodeLocation, len(in))
+	for i, cl := range in {
+		out[i] = CodeLocation{
+			FileName:   sanitizeLine(cl.FileName),
+			LineNumber: cl.LineNumber,
+		}
+	}
+	return out
 }
 
 // formatProgressReport renders a ProgressReport to a compact string.

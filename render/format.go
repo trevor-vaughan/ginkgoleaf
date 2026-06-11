@@ -20,6 +20,7 @@ const (
 	FormatText     Format = "text"
 	FormatShell    Format = "shell"
 	FormatTAP      Format = "tap"
+	FormatCucumber Format = "cucumber"
 )
 
 // allFormats is the canonical, ordered list of supported formats. It is
@@ -27,7 +28,7 @@ const (
 // string, so the two cannot drift apart.
 var allFormats = []Format{
 	FormatTree, FormatJest, FormatMarkdown, FormatGitHub,
-	FormatGitLab, FormatText, FormatShell, FormatTAP,
+	FormatGitLab, FormatText, FormatShell, FormatTAP, FormatCucumber,
 }
 
 // ErrUnknownFormat is returned by ValidateFormat for unsupported values.

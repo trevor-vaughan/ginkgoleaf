@@ -228,14 +228,18 @@ func TestTranslateSanitizesFailureBody(t *testing.T) {
 
 func TestTranslateSanitizesInjection(t *testing.T) {
 	in := types.Report{
-		SuiteDescription: "Inj Suite",
+		SuiteDescription: "Inj Suite\x1b[2J\rwiped",
 		SuiteSucceeded:   false,
 		SpecReports: types.SpecReports{
 			{
 				State:                   types.SpecStateFailed,
 				ContainerHierarchyTexts: []string{"Group\x1b[0Ksection_start:9:evil\rForged\n::error::ghinject", "Inner"},
-				LeafNodeText:            "fails\nnot ok 99 - forged",
-				LeafNodeLocation:        types.CodeLocation{FileName: "f\n::warning::x.go", LineNumber: 1},
+				ContainerHierarchyLocations: []types.CodeLocation{
+					{FileName: "c\x1b[31m\revil_test.go", LineNumber: 7},
+					{FileName: "inner_test.go", LineNumber: 9},
+				},
+				LeafNodeText:     "fails\nnot ok 99 - forged",
+				LeafNodeLocation: types.CodeLocation{FileName: "f\n::warning::x.go", LineNumber: 1},
 				Failure: types.Failure{
 					Message:  "boom",
 					Location: types.CodeLocation{FileName: "f.go", LineNumber: 1},
@@ -244,6 +248,24 @@ func TestTranslateSanitizesInjection(t *testing.T) {
 		},
 	}
 	r := render.Translate(in)
+
+	// Suite.Name and container-location FileNames cross the same untrusted
+	// boundary as the spec texts: cucumber prints the name on its Feature:
+	// line and each container location as a "# file:line" ref, so control
+	// bytes must be stripped at the translate chokepoint.
+	if strings.ContainsAny(r.Suite.Name, "\x1b\r") {
+		t.Fatalf("Suite.Name retained control bytes: %q", r.Suite.Name)
+	}
+	locs := r.Specs[0].ContainerLocations
+	if len(locs) != 2 {
+		t.Fatalf("ContainerLocations: want 2 entries parallel to ContainerHier, got %d", len(locs))
+	}
+	if strings.ContainsAny(locs[0].FileName, "\x1b\r") {
+		t.Fatalf("ContainerLocations[0].FileName retained control bytes: %q", locs[0].FileName)
+	}
+	if empty := render.Translate(types.Report{SpecReports: types.SpecReports{{LeafNodeText: "x"}}}); empty.Specs[0].ContainerLocations != nil {
+		t.Fatalf("ContainerLocations: want nil for a spec without container locations, got %#v", empty.Specs[0].ContainerLocations)
+	}
 
 	var gh bytes.Buffer
 	if err := render.NewGitHub().WriteAll(&gh, r); err != nil {

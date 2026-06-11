@@ -146,11 +146,15 @@ func passingSpec(text string) render.SpecRow {
 	return render.SpecRow{
 		FullText:      []string{"Outer", "Inner", text},
 		ContainerHier: []string{"Outer", "Inner"},
-		LeafText:      text,
-		State:         render.StatePassed,
-		Duration:      12 * time.Millisecond,
-		StartTime:     FixedStart,
-		EndTime:       FixedStart.Add(12 * time.Millisecond),
+		ContainerLocations: []render.CodeLocation{
+			{FileName: "/example/outer_test.go", LineNumber: 10},
+			{FileName: "/example/inner_test.go", LineNumber: 15},
+		},
+		LeafText:  text,
+		State:     render.StatePassed,
+		Duration:  12 * time.Millisecond,
+		StartTime: FixedStart,
+		EndTime:   FixedStart.Add(12 * time.Millisecond),
 		Location: render.CodeLocation{
 			FileName:   "/example/inner_test.go",
 			LineNumber: 21,
@@ -325,16 +329,21 @@ func beforeSuiteFailReport() render.Report {
 // leafSpec builds a passing spec at an arbitrary container path. Used to
 // compose reports whose specs share containers out of order.
 func leafSpec(container []string, text string) render.SpecRow {
+	locs := make([]render.CodeLocation, len(container))
+	for i := range container {
+		locs[i] = render.CodeLocation{FileName: "/example/interleaved_test.go", LineNumber: 10 + i}
+	}
 	return render.SpecRow{
-		FullText:      append(append([]string{}, container...), text),
-		ContainerHier: append([]string{}, container...),
-		LeafText:      text,
-		State:         render.StatePassed,
-		Duration:      time.Millisecond,
-		StartTime:     FixedStart,
-		EndTime:       FixedStart.Add(time.Millisecond),
-		Location:      render.CodeLocation{FileName: "/example/interleaved_test.go", LineNumber: 21},
-		NumAttempts:   1,
+		FullText:           append(append([]string{}, container...), text),
+		ContainerHier:      append([]string{}, container...),
+		ContainerLocations: locs,
+		LeafText:           text,
+		State:              render.StatePassed,
+		Duration:           time.Millisecond,
+		StartTime:          FixedStart,
+		EndTime:            FixedStart.Add(time.Millisecond),
+		Location:           render.CodeLocation{FileName: "/example/interleaved_test.go", LineNumber: 21},
+		NumAttempts:        1,
 	}
 }
 

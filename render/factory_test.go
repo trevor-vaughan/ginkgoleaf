@@ -11,6 +11,7 @@ func TestNewAllFormats(t *testing.T) {
 	for _, f := range []render.Format{
 		render.FormatTree, render.FormatJest, render.FormatMarkdown, render.FormatGitHub,
 		render.FormatGitLab, render.FormatText, render.FormatShell, render.FormatTAP,
+		render.FormatCucumber,
 	} {
 		r, err := render.New(f, false)
 		if err != nil || r == nil {

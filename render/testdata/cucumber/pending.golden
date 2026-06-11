@@ -1,0 +1,10 @@
+Feature: My Suite
+
+  Scenario: is pending
+    Given Outer     # /example/outer_test.go:10
+    And Inner       # /example/inner_test.go:15
+    Then is pending # /example/inner_test.go:21
+
+1 scenario (1 pending)
+3 steps (3 pending)
+50ms

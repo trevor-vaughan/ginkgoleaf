@@ -24,6 +24,8 @@ func New(f Format, color bool) (Renderer, error) {
 		return NewShell(), nil
 	case FormatTAP:
 		return NewTAP(), nil
+	case FormatCucumber:
+		return NewCucumber(color), nil
 	default:
 		return nil, fmt.Errorf("%w %q", ErrUnknownFormat, string(f))
 	}

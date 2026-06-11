@@ -1,7 +1,7 @@
 // Package render is ginkgoleaf's runtime-free rendering core. It defines the
-// canonical, Ginkgo-agnostic [Report] model and the eight [Renderer]
-// implementations (tree, jest, markdown, github, gitlab, text, shell, tap),
-// selected via [New].
+// canonical, Ginkgo-agnostic [Report] model and the nine [Renderer]
+// implementations (tree, jest, markdown, github, gitlab, text, shell, tap,
+// cucumber), selected via [New].
 //
 // It is a supported public API for callers building their own pipeline: parse
 // or construct a [Report] (or use [Translate] / [TranslateWithParser] to build

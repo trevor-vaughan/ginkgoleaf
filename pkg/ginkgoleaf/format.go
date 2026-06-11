@@ -18,6 +18,7 @@ const (
 	FormatText     = render.FormatText
 	FormatShell    = render.FormatShell
 	FormatTAP      = render.FormatTAP
+	FormatCucumber = render.FormatCucumber
 )
 
 // ValidateFormat returns ErrUnknownFormat for unsupported values.

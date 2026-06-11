@@ -1,0 +1,22 @@
+Feature: My Suite
+
+  Scenario: captures output
+    Given Outer          # /example/outer_test.go:10
+    And Inner            # /example/inner_test.go:15
+    Then captures output # /example/inner_test.go:21
+      at /example/inner_test.go:60
+      expected: 2
+      actual:   1
+      captured GinkgoWriter output:
+      log line 1
+      log line 2
+      captured stdout/stderr:
+      stderr noise
+      progress report:
+      spec goroutine:
+        main.It.func1
+          /example/inner_test.go:60
+
+1 scenario (1 failed)
+3 steps (2 passed, 1 failed)
+50ms

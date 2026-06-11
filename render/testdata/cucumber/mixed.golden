@@ -1,0 +1,28 @@
+Feature: Mixed Suite
+
+  Scenario: a passes
+    Given Outer   # /example/outer_test.go:10
+    And Inner     # /example/inner_test.go:15
+    Then a passes # /example/inner_test.go:21
+
+  Scenario: equals fails
+    Given Outer       # /example/outer_test.go:10
+    And Inner         # /example/inner_test.go:15
+    Then equals fails # /example/inner_test.go:21
+      at /example/inner_test.go:25
+      expected: 2
+      actual:   1
+
+  Scenario: is skipped
+    Given Outer     # /example/outer_test.go:10
+    And Inner       # /example/inner_test.go:15
+    Then is skipped # /example/inner_test.go:21
+
+  Scenario: is pending
+    Given Outer     # /example/outer_test.go:10
+    And Inner       # /example/inner_test.go:15
+    Then is pending # /example/inner_test.go:21
+
+4 scenarios (1 passed, 1 failed, 1 skipped, 1 pending)
+12 steps (5 passed, 1 failed, 3 skipped, 3 pending)
+100ms

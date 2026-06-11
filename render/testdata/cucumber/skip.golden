@@ -1,0 +1,10 @@
+Feature: My Suite
+
+  Scenario: is skipped
+    Given Outer     # /example/outer_test.go:10
+    And Inner       # /example/inner_test.go:15
+    Then is skipped # /example/inner_test.go:21
+
+1 scenario (1 skipped)
+3 steps (3 skipped)
+50ms

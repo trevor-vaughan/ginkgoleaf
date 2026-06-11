@@ -34,6 +34,10 @@ var _ = Describe("Format", func() {
 		Expect(string(ginkgoleaf.FormatJest)).To(Equal("jest"))
 	})
 
+	It("FormatCucumber has the string value 'cucumber'", func() {
+		Expect(string(ginkgoleaf.FormatCucumber)).To(Equal("cucumber"))
+	})
+
 	Describe("ValidateFormat", func() {
 		It("accepts a known format without error", func() {
 			Expect(ginkgoleaf.ValidateFormat(ginkgoleaf.FormatJest)).To(Succeed())

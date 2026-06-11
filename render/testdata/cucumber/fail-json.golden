@@ -1,0 +1,17 @@
+Feature: My Suite
+
+  Scenario: json fails
+    Given Outer     # /example/outer_test.go:10
+    And Inner       # /example/inner_test.go:15
+    Then json fails # /example/inner_test.go:21
+      at /example/inner_test.go:35
+      diff (-expected +actual):
+        map[string]any{
+        	"a": float64(1),
+      - 	"b": float64(3),
+      + 	"b": float64(2),
+        }
+
+1 scenario (1 failed)
+3 steps (2 passed, 1 failed)
+50ms

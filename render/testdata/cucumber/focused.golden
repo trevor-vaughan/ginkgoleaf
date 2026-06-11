@@ -1,0 +1,10 @@
+Feature: My Suite
+
+  Scenario: [FOCUS] is focused
+    Given Outer     # /example/outer_test.go:10
+    And Inner       # /example/inner_test.go:15
+    Then is focused # /example/inner_test.go:21
+
+1 scenario (1 passed)
+3 steps (3 passed)
+50ms

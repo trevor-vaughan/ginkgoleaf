@@ -40,7 +40,7 @@ tasks:
     requires:
       vars:
         - name: MODE
-          enum: [tree, jest, markdown, github, gitlab, text, shell, tap, llm]
+          enum: [tree, jest, markdown, github, gitlab, text, shell, tap, cucumber, llm]
     cmds:
       - mkdir -p .test-output
       # Mirror the post-processing layout used by downstream consumers:
@@ -89,7 +89,7 @@ tasks:
     requires:
       vars:
         - name: FORMAT
-          enum: [tree, jest, markdown, github, gitlab, text, shell, tap]
+          enum: [tree, jest, markdown, github, gitlab, text, shell, tap, cucumber]
         - name: COLOR
           enum: [auto, always, never]
     cmds:

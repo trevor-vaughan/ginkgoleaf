@@ -176,6 +176,7 @@ func TestRenderersSurfaceWriteErrors(t *testing.T) {
 		"markdown": render.NewMarkdown(),
 		"github":   render.NewGitHub(),
 		"gitlab":   render.NewGitLab(func() int64 { return 1 }, true),
+		"cucumber": render.NewCucumber(true),
 	}
 	for name, rdr := range renderers {
 		if err := rdr.WriteAll(failWriter{}, r); err == nil {

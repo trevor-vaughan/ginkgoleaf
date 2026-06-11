@@ -1,0 +1,13 @@
+Feature: My Suite
+
+  Scenario: equals fails
+    Given Outer       # /example/outer_test.go:10
+    And Inner         # /example/inner_test.go:15
+    Then equals fails # /example/inner_test.go:21
+      at /example/inner_test.go:25
+      expected: 2
+      actual:   1
+
+1 scenario (1 failed)
+3 steps (2 passed, 1 failed)
+50ms

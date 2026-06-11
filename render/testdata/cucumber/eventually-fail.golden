@@ -1,0 +1,15 @@
+Feature: My Suite
+
+  Scenario: eventually fails
+    Given Outer           # /example/outer_test.go:10
+    And Inner             # /example/inner_test.go:15
+    Then eventually fails # /example/inner_test.go:21
+      at /example/inner_test.go:49
+      expected: 5
+      actual:   4
+      (eventually: 2s after 200 attempts, polling every 10ms)
+      last error: expected 4 to equal 5
+
+1 scenario (1 failed)
+3 steps (2 passed, 1 failed)
+50ms
