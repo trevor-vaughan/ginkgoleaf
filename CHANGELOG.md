@@ -7,7 +7,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 GitHub release notes are generated automatically by GoReleaser from
 Conventional Commit messages; this file tracks human-curated highlights.
 
-## [Unreleased]
+## v0.1.0
 
 ### Added
 - Initial release of ginkgoleaf, a Ginkgo v2 output formatter with nine
