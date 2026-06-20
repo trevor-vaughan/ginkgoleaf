@@ -3,3 +3,5 @@
 └── Outer
     └── Inner
         └── - is skipped
+
+Summary: 1 skipped in 50ms — PASSED

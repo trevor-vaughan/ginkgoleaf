@@ -11,3 +11,5 @@ Failures:
     actual:   4
     (eventually: 2s after 200 attempts, polling every 10ms)
     last error: expected 4 to equal 5
+
+Summary: 1 failed in 50ms — FAILED

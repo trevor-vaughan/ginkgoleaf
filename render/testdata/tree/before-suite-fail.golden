@@ -5,3 +5,5 @@
         └── - never runs
 
 Suite-level failure: BeforeSuite failed
+
+Summary: 1 skipped in 50ms — FAILED

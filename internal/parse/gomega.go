@@ -80,6 +80,8 @@ func parseRetryHeader(s string) (*render.RetryContext, string, bool) {
 	return nil, "", false
 }
 
+// parseSeconds converts gomega's decimal-seconds duration text (e.g.
+// "1.5") to a time.Duration, returning 0 for anything unparseable.
 func parseSeconds(s string) time.Duration {
 	f, err := strconv.ParseFloat(s, 64)
 	if err != nil {
@@ -90,6 +92,12 @@ func parseSeconds(s string) time.Duration {
 
 var rxExpectedToX = regexp.MustCompile(`(?s)^Expected\n(.*?)\nto (equal|contain substring|match JSON of|match YAML of)\n(.*)$`)
 
+// parseExpectedToX matches gomega's canonical "Expected\n<actual>\nto
+// <matcher>\n<expected>" failure shape for the four value matchers we render
+// structurally. Group 1 is the actual value, group 2 the matcher phrase
+// (mapped to a MatcherKind), group 3 the expected value; both values are
+// trimmed. Returns ok=false (and MatcherUnknown) when the text does not fit
+// this shape, so the caller can fall back to MatcherGeneric.
 func parseExpectedToX(s string) (kind render.MatcherKind, actual, expected string, ok bool) {
 	m := rxExpectedToX.FindStringSubmatch(s)
 	if m == nil {

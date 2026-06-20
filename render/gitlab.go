@@ -100,7 +100,7 @@ func (g *GitLabRenderer) WriteAll(w io.Writer, r Report) error {
 	}
 	ew.printf("%s %s — %s (%s)\n",
 		gitlabColor(g.color, code, verdict), r.Suite.Name,
-		coloredStatus(g.color, r.Suite),
+		coloredStatus(g.color, r.Suite, true),
 		formatDurMs(r.EndTime.Sub(r.StartTime)),
 	)
 	return ew.Err()
@@ -115,7 +115,7 @@ func (g *GitLabRenderer) writeHeader(ew *errWriter, r Report) {
 	}
 	dur := formatDurMs(r.EndTime.Sub(r.StartTime))
 	ew.printf("%s (%s, %s)\n", header, specCount(r.Suite.NumSpecs), dur)
-	ew.printf("  %s\n", coloredStatus(g.color, r.Suite))
+	ew.printf("  %s\n", coloredStatus(g.color, r.Suite, true))
 }
 
 // gitlabLeafLabel renders one leaf with an ANSI-colored glyph that

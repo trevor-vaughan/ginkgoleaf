@@ -8,3 +8,5 @@ Failures:
   ! Outer > Inner > interrupted
     at /example/inner_test.go:55
     Interrupted by user
+
+Summary: 1 failed in 50ms — FAILED

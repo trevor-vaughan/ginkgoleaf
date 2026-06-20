@@ -54,6 +54,35 @@ func failingReportJSON() string {
 	return string(j)
 }
 
+// twoSuiteReportJSON marshals two suites — one passing, one failing — to
+// exercise the cross-suite grand total. Each suite runs 50ms, so the total
+// duration is 100ms.
+func twoSuiteReportJSON() string {
+	start := time.Date(2026, 5, 28, 12, 0, 0, 0, time.UTC)
+	end := start.Add(50 * time.Millisecond)
+	pass := types.Report{
+		SuiteDescription: "Alpha Suite", SuiteSucceeded: true,
+		StartTime: start, EndTime: end,
+		SpecReports: []types.SpecReport{{
+			ContainerHierarchyTexts: []string{"Outer"}, LeafNodeText: "passes",
+			LeafNodeLocation: types.CodeLocation{FileName: "a.go", LineNumber: 1},
+			State:            types.SpecStatePassed, RunTime: 12 * time.Millisecond,
+		}},
+	}
+	fail := types.Report{
+		SuiteDescription: "Beta Suite", SuiteSucceeded: false,
+		StartTime: start, EndTime: end,
+		SpecReports: []types.SpecReport{{
+			ContainerHierarchyTexts: []string{"Outer"}, LeafNodeText: "breaks",
+			LeafNodeLocation: types.CodeLocation{FileName: "b.go", LineNumber: 9},
+			State:            types.SpecStateFailed, RunTime: 8 * time.Millisecond,
+		}},
+	}
+	j, err := json.Marshal([]types.Report{pass, fail})
+	Expect(err).NotTo(HaveOccurred())
+	return string(j)
+}
+
 var _ = Describe("openInput", func() {
 	It("does not duplicate the os PathError prefix for a missing file", func() {
 		_, err := openInput("/no/such/ginkgoleaf/report.json", nil)
@@ -95,6 +124,31 @@ var _ = Describe("Run", func() {
 		ok, err := Run(strings.NewReader(failingReportJSON()), &out, "text", "never")
 		Expect(err).To(Succeed(), "rendering a failing report is not itself an error")
 		Expect(ok).To(BeFalse(), "a failed suite must report ok=false")
+	})
+
+	It("appends a cross-suite grand total for a multi-suite tree run", func() {
+		var out bytes.Buffer
+		ok, err := Run(strings.NewReader(twoSuiteReportJSON()), &out, "tree", "never")
+		Expect(err).To(Succeed())
+		Expect(ok).To(BeFalse(), "one suite failed, so the run is not ok")
+		Expect(out.String()).To(ContainSubstring(
+			"Total: 2 suites | 1 passed | 1 failed in 100ms — FAILED"))
+	})
+
+	It("omits the grand total for a single-suite tree run (the roll-up already covers it)", func() {
+		var out bytes.Buffer
+		_, err := Run(strings.NewReader(passingReportJSON()), &out, "tree", "never")
+		Expect(err).To(Succeed())
+		Expect(out.String()).NotTo(ContainSubstring("Total:"),
+			"a single suite must not get a redundant grand total")
+	})
+
+	It("does not emit the tree grand total for non-tree formats", func() {
+		var out bytes.Buffer
+		_, err := Run(strings.NewReader(twoSuiteReportJSON()), &out, "text", "never")
+		Expect(err).To(Succeed())
+		Expect(out.String()).NotTo(ContainSubstring("Total:"),
+			"the grand total is a tree-format feature")
 	})
 
 	It("classifies malformed JSON as invalid input (exit 2)", func() {

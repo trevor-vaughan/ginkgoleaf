@@ -18,3 +18,5 @@ Failures:
     spec goroutine:
       main.It.func1
         /example/inner_test.go:60
+
+Summary: 1 failed in 50ms — FAILED

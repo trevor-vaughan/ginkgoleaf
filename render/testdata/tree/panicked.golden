@@ -11,3 +11,5 @@ Failures:
     stack trace:
     goroutine 1 [running]:
       example/inner_test.go:44 +0x42
+
+Summary: 1 panicked in 50ms — FAILED
