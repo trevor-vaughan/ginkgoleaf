@@ -1,13 +1,61 @@
-// Command ginkgoleaf renders a Ginkgo JSON report into one of the
-// supported output formats.
+// Command ginkgoleaf renders a Ginkgo v2 JSON report into one of nine
+// human- and LLM-friendly output formats.
 //
-//	ginkgoleaf [--in PATH|-] [--out PATH|-] [--format FMT] [--color auto|always|never] [--exit-code]
+// Ginkgo's --json-report decorator writes an array of test results that is
+// faithful but awkward to read. ginkgoleaf consumes that file (or stdin) and
+// re-renders it as a compact tree, a CI-annotation stream, Markdown, TAP, and
+// more — without linking the Ginkgo runtime, so the binary stays small.
+//
+// # Usage
+//
+//	ginkgoleaf [--in PATH|-] [--out PATH|-] [--format FMT] [--color MODE] [--exit-code]
 //	ginkgoleaf --version
 //
-// The CLI deliberately does NOT import the ginkgoleaf library package
-// (which links the Ginkgo runtime); it depends only on the leaf render
-// and parse packages, so `--help` shows the six real flags rather than
-// the Ginkgo framework's test flags, and the binary stays small.
+// # Flags
+//
+//	-in      PATH | -   Ginkgo JSON report to read (default: stdin)
+//	-out     PATH | -   output path; a file path writes there only (stdout
+//	                    stays silent), - is stdout (default)
+//	-format  FMT        output format (default: tree); one of:
+//	                    tree, jest, markdown, github, gitlab, text, shell,
+//	                    tap, cucumber
+//	-color   MODE       auto | always | never (default: auto). auto colors a
+//	                    terminal or a pipe, stays plain for a file redirect,
+//	                    and honors NO_COLOR / CLICOLOR(_FORCE)
+//	-exit-code          exit 1 if the report contains failures (default: off)
+//	-version            print build information and exit
+//
+// # Exit codes
+//
+//	0  rendered cleanly
+//	1  render error, or — with --exit-code — the report contained failures
+//	2  invalid input (malformed JSON, no reports) or an unknown format/color
+//
+// # Examples
+//
+// Render a report file as a Markdown summary:
+//
+//	ginkgo --json-report=report.json ./...
+//	ginkgoleaf --in report.json --format markdown
+//
+// Stream Ginkgo's output straight through and emit GitHub Actions
+// annotations:
+//
+//	ginkgo --json-report=/dev/stdout ./... | ginkgoleaf --format github
+//
+// Gate CI on the rendered result while saving the tree to a file:
+//
+//	ginkgoleaf --in report.json --out summary.txt --exit-code
+//
+// # Design
+//
+// The CLI deliberately does NOT import the ginkgoleaf library package (which
+// links the Ginkgo runtime); it depends only on the leaf render and parse
+// packages. That keeps --help limited to the six real flags rather than the
+// Ginkgo framework's test flags, and keeps the binary small. For the in-suite
+// integration that renders from inside a running suite, see the
+// [github.com/trevor-vaughan/ginkgoleaf] package; for the runtime-free
+// rendering core, see [github.com/trevor-vaughan/ginkgoleaf/render].
 package main
 
 import (
@@ -18,6 +66,7 @@ import (
 	"io"
 	"os"
 	"runtime/debug"
+	"time"
 
 	"github.com/onsi/ginkgo/v2/types"
 	"golang.org/x/term"
@@ -219,12 +268,25 @@ func Run(r io.Reader, w io.Writer, format, color string) (ok bool, err error) {
 	}
 
 	ok = true
+	suites := make([]render.SuiteRow, 0, len(reports))
+	var total time.Duration
 	for _, rep := range reports {
 		canon := render.TranslateWithParser(rep, parse.ParseGomega)
 		if !canon.Suite.SuiteSucceeded {
 			ok = false
 		}
 		if err := renderOne(w, render.Format(format), color, canon); err != nil {
+			return false, err
+		}
+		suites = append(suites, canon.Suite)
+		total += canon.EndTime.Sub(canon.StartTime)
+	}
+
+	// A multi-suite tree run (e.g. `ginkgo -r` across packages) closes with
+	// one cross-suite grand total. A single suite already ends with its own
+	// roll-up, so the total would be redundant; other formats don't carry it.
+	if render.Format(format) == render.FormatTree && len(suites) > 1 {
+		if err := render.WriteTreeGrandTotal(w, suites, total, resolveCLIColor(color, w)); err != nil {
 			return false, err
 		}
 	}

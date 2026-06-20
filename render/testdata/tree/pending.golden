@@ -3,3 +3,5 @@
 └── Outer
     └── Inner
         └── ◌ is pending
+
+Summary: 1 pending in 50ms — PASSED

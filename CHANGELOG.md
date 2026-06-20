@@ -7,6 +7,16 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 GitHub release notes are generated automatically by GoReleaser from
 Conventional Commit messages; this file tracks human-curated highlights.
 
+## v0.1.1
+
+### Added
+- The `tree` format now closes each suite with a roll-up summary line —
+  `Summary: <tally> in <duration> — PASSED|FAILED` — so the verdict is
+  visible without scrolling back to the header.
+- A multi-suite `tree` run (e.g. `ginkgo -r` across packages) ends with a
+  single cross-suite grand total: `Total: N suites | <tally> in <duration>
+  — PASSED|FAILED`, failing if any suite failed.
+
 ## v0.1.0
 
 ### Added

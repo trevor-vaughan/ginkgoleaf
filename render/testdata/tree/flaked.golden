@@ -3,3 +3,5 @@
 └── Outer
     └── Inner
         └── ✓ flakes then passes
+
+Summary: 1 passed in 50ms — PASSED

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"strings"
+	"time"
 
 	"github.com/xlab/treeprint"
 )
@@ -21,6 +22,8 @@ import (
 //	└── Describe two
 //	    └── ✓ fourth leaf
 //
+//	Summary: 20 passed in 24ms — PASSED
+//
 // Container hierarchy (Describe / Context / When) becomes inner nodes;
 // each It block becomes a leaf with a glyph indicating outcome. The
 // tree layout itself is built by github.com/xlab/treeprint — a small,
@@ -34,8 +37,10 @@ type TreeRenderer struct {
 // glyphs and the failure summary lines.
 func NewTree(color bool) *TreeRenderer { return &TreeRenderer{color: color} }
 
-// WriteAll renders the suite header, status line, hierarchy tree, and
-// (if any failures) a trailing summary block listing each failed spec.
+// WriteAll renders the suite header, status line, hierarchy tree,
+// (if any failures) a block listing each failed spec, and a closing
+// roll-up line — "Summary: <tally> in <dur> — PASSED|FAILED" — so the
+// verdict is visible without scrolling back to the header.
 func (t *TreeRenderer) WriteAll(w io.Writer, r Report) error {
 	a := NewANSI(w, t.color)
 	header := r.Suite.Path
@@ -47,7 +52,7 @@ func (t *TreeRenderer) WriteAll(w io.Writer, r Report) error {
 	if _, err := fmt.Fprintf(w, " %s\n", dim(t.color, fmt.Sprintf("(%s, %s)", specCount(r.Suite.NumSpecs), dur))); err != nil {
 		return err
 	}
-	if _, err := io.WriteString(w, "  "+coloredStatus(t.color, r.Suite)+"\n"); err != nil {
+	if _, err := io.WriteString(w, "  "+coloredStatus(t.color, r.Suite, true)+"\n"); err != nil {
 		return err
 	}
 
@@ -78,9 +83,69 @@ func (t *TreeRenderer) WriteAll(w io.Writer, r Report) error {
 	if r.Suite.SpecialFailure != "" {
 		a.WriteRed("\nSuite-level failure: " + r.Suite.SpecialFailure + "\n")
 	}
+
+	// Closing roll-up: a verdict line so the outcome is visible without
+	// scrolling back to the header. Flaked/seed are intentionally omitted to
+	// keep it terse.
+	if _, err := fmt.Fprintf(w, "\nSummary: %s in %s — %s\n",
+		coloredStatus(t.color, r.Suite, false),
+		formatDurMs(r.EndTime.Sub(r.StartTime)),
+		verdictLabel(t.color, r.Suite.SuiteSucceeded),
+	); err != nil {
+		return err
+	}
 	// Surface any error from the colored Write* calls above (header, Failures
 	// label, glyphs, SpecialFailure), which swallow their errors individually.
 	return a.Err()
+}
+
+// verdictLabel returns the PASSED/FAILED token for a roll-up line, colored
+// green or red when ANSI is enabled.
+func verdictLabel(color, succeeded bool) string {
+	text, sgr := "FAILED", "31"
+	if succeeded {
+		text, sgr = "PASSED", "32"
+	}
+	if !color {
+		return text
+	}
+	return "\x1b[" + sgr + "m" + text + "\x1b[0m"
+}
+
+// suiteCount renders a suite tally with correct singular/plural for the
+// grand-total line.
+func suiteCount(n int) string {
+	if n == 1 {
+		return "1 suite"
+	}
+	return fmt.Sprintf("%d suites", n)
+}
+
+// WriteTreeGrandTotal writes a cross-suite roll-up for the tree format: the
+// suite count, the aggregated per-state tally (flaked/seed omitted to match
+// the per-suite summary), the summed duration, and an overall verdict that
+// fails if any suite failed. The CLI calls this once after every suite's
+// tree has rendered, so a multi-package run ends with a single headline
+// total. color toggles ANSI.
+func WriteTreeGrandTotal(w io.Writer, suites []SuiteRow, total time.Duration, color bool) error {
+	agg := SuiteRow{SuiteSucceeded: true}
+	for _, s := range suites {
+		agg.NumPassed += s.NumPassed
+		agg.NumFailed += s.NumFailed
+		agg.NumPanicked += s.NumPanicked
+		agg.NumSkipped += s.NumSkipped
+		agg.NumPending += s.NumPending
+		if !s.SuiteSucceeded {
+			agg.SuiteSucceeded = false
+		}
+	}
+	_, err := fmt.Fprintf(w, "\nTotal: %s | %s in %s — %s\n",
+		suiteCount(len(suites)),
+		coloredStatus(color, agg, false),
+		formatDurMs(total),
+		verdictLabel(color, agg.SuiteSucceeded),
+	)
+	return err
 }
 
 // buildSpecTree renders the container hierarchy across all specs as a
@@ -114,10 +179,12 @@ func boldLabel(color bool, label string) string {
 	return "\x1b[1m" + label + "\x1b[0m"
 }
 
-// coloredStatus is the colored variant of treeStatus: each category
-// keeps its conventional color (green for passed, red for failed,
-// yellow for skipped/pending) when ANSI is enabled.
-func coloredStatus(color bool, s SuiteRow) string {
+// coloredStatus renders the per-state tally — each category in its
+// conventional color (green for passed, red for failed, yellow for
+// skipped/pending) when ANSI is enabled. includeFlaked appends the
+// flaked count; the header status line shows it, the roll-up summaries
+// suppress it to stay terse.
+func coloredStatus(color bool, s SuiteRow, includeFlaked bool) string {
 	type seg struct {
 		text  string
 		color string // ANSI SGR digits, or "" for plain
@@ -138,7 +205,7 @@ func coloredStatus(color bool, s SuiteRow) string {
 	if s.NumPending > 0 {
 		segs = append(segs, seg{fmt.Sprintf("%d pending", s.NumPending), "33"})
 	}
-	if s.NumFlaked > 0 {
+	if includeFlaked && s.NumFlaked > 0 {
 		segs = append(segs, seg{fmt.Sprintf("%d flaked", s.NumFlaked), "33"})
 	}
 	if len(segs) == 0 {
@@ -234,7 +301,7 @@ func treeGlyph(s State) string {
 // that emit logs where escape codes would be stripped (github) or where
 // the caller wraps the line in its own color sequences.
 func plainStatus(s SuiteRow) string {
-	return coloredStatus(false, s)
+	return coloredStatus(false, s, true)
 }
 
 // stripTopContainer returns copies of specs with the first ContainerHier

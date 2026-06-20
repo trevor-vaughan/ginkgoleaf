@@ -22,7 +22,7 @@ your suite as a library, or post-process Ginkgo's JSON report from the CLI.
 
 | Format     | Mode      | Use it for                                                                                                                                                                       |
 |------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `tree`     | batch     | The default human format — box-drawing tree per suite with bold headings, colored glyphs, and a trailing Failures block.                                                         |
+| `tree`     | batch     | The default human format — box-drawing tree per suite with bold headings, colored glyphs, a trailing Failures block, and a closing roll-up summary (a multi-suite run also gets a final cross-suite grand total).                                                         |
 | `jest`     | streaming | jest-style with check/X glyphs, BDD nesting headers, inline failures, file:line source refs.                                                                                    |
 | `markdown` | batch     | `<details>` blocks per top-level container; failing groups expanded by default.                                                                                                  |
 | `github`   | batch     | GitHub Actions workflow commands (`::group::`, `::error file=...,line=...`), preceded by a two-line human-readable header (suite path + counts) that Actions logs as plain text. |
@@ -66,6 +66,8 @@ Failures:
     at /example/inner_test.go:25
     expected: 2
     actual:   1
+
+Summary: 1 passed | 1 failed | 1 skipped | 1 pending in 100ms — FAILED
 ```
 
 </details>

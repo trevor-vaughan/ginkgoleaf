@@ -13,3 +13,5 @@ Failures:
     - 	"b": float64(3),
     + 	"b": float64(2),
       }
+
+Summary: 1 failed in 50ms — FAILED

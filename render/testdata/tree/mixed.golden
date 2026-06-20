@@ -12,3 +12,5 @@ Failures:
     at /example/inner_test.go:25
     expected: 2
     actual:   1
+
+Summary: 1 passed | 1 failed | 1 skipped | 1 pending in 100ms — FAILED

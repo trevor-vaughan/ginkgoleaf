@@ -3,3 +3,5 @@
 └── Outer
     └── Inner
         └── ✓ [FOCUS] is focused
+
+Summary: 1 passed in 50ms — PASSED
